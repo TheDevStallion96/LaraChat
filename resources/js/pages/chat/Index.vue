@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useChat } from '@ai-sdk/vue';
 import { Head, router } from '@inertiajs/vue3';
-import { Search, Globe, Settings2 } from '@lucide/vue';
+import { Search, Globe, RefreshCw, Settings2 } from '@lucide/vue';
 import { DefaultChatTransport } from 'ai';
 import { computed, ref } from 'vue';
 import { Button } from '@/components/ui/button';
@@ -36,8 +36,9 @@ const config = ref<ChatConfig>({
     instructions: undefined,
 });
 const showConfigSidebar = ref(false);
+const regenerating = ref(false);
 
-const { messages, sendMessage, status, stop } = useChat(() => ({
+const { messages, sendMessage, status, stop, setMessages } = useChat(() => ({
     messages: props.initialMessages ?? [],
     transport: new DefaultChatTransport({
         api: conversationId.value ? `/chat/${conversationId.value}/messages` : '/chat',
@@ -61,7 +62,7 @@ const activeConversation = computed(() =>
 );
 
 const isStreaming = computed(() =>
-    status.value === 'streaming' || status.value === 'submitted',
+    status.value === 'streaming' || status.value === 'submitted' || regenerating.value,
 );
 
 const activeToolLabels: Record<ToolName, string> = {
@@ -76,6 +77,103 @@ const activeToolIcons: Record<ToolName, typeof Search> = {
 
 function handleSend(message: string) {
     sendMessage({ text: message });
+}
+
+async function handleEdit(id: string, text: string) {
+    if (!conversationId.value) return;
+
+    const response = await fetch(`/chat/${conversationId.value}/messages/${id}`, {
+        method: 'PATCH',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({ text }),
+    });
+
+    if (!response.ok) return;
+
+    const data = await response.json();
+
+    setMessages(data.messages);
+
+    refreshConversations();
+}
+
+async function handleRegenerate() {
+    if (!conversationId.value || regenerating.value) return;
+
+    regenerating.value = true;
+
+    if (messages.value.length > 0 && messages.value[messages.value.length - 1]?.role === 'assistant') {
+        messages.value = messages.value.slice(0, -1);
+    }
+
+    try {
+        const response = await fetch(`/chat/${conversationId.value}/regenerate`, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/json',
+                'Accept': 'text/event-stream',
+            },
+            body: JSON.stringify({
+                provider: config.value.provider || undefined,
+                model: config.value.model || undefined,
+                tools: config.value.tools.length > 0 ? config.value.tools : undefined,
+                instructions: config.value.instructions || undefined,
+            }),
+        });
+
+        if (!response.ok || !response.body) {
+            regenerating.value = false;
+            return;
+        }
+
+        let accumulatedText = '';
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            buffer += decoder.decode(value, { stream: true });
+
+            const lines = buffer.split('\n');
+            buffer = lines.pop() ?? '';
+
+            for (const line of lines) {
+                if (line.startsWith('data: ')) {
+                    const data = line.slice(6);
+
+                    if (data === '"[DONE]"') continue;
+
+                    if (data.startsWith('"') && data.endsWith('"')) {
+                        const text = JSON.parse(data);
+                        accumulatedText += text;
+                    }
+                }
+            }
+        }
+
+        if (accumulatedText) {
+            messages.value = [
+                ...messages.value,
+                {
+                    id: crypto.randomUUID(),
+                    role: 'assistant' as const,
+                    parts: [{ type: 'text' as const, text: accumulatedText }],
+                },
+            ];
+        }
+    } finally {
+        regenerating.value = false;
+        refreshConversations();
+    }
 }
 
 function refreshConversations() {
@@ -123,7 +221,19 @@ function refreshConversations() {
                         v-for="(message, index) in messages"
                         :key="message.id ?? index"
                         :message="message"
+                        :is-last-message="index === messages.length - 1"
+                        :is-streaming="isStreaming"
+                        @edit="handleEdit"
+                        @regenerate="handleRegenerate"
                     />
+
+                    <div
+                        v-if="regenerating"
+                        class="flex items-center justify-center gap-2 py-4 text-sm text-muted-foreground"
+                    >
+                        <RefreshCw class="h-4 w-4 animate-spin" />
+                        Regenerating...
+                    </div>
                 </div>
             </div>
 
