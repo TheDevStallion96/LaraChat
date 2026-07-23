@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Ai\Agents\ChatAgent;
+use App\Events\AiRequestUpdated;
+use App\Models\AiRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -22,19 +23,35 @@ class ChatController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'message' => ['required', 'string', 'max:10000'],
+            'messages' => ['required', 'array', 'min:1'],
+            'messages.*.role' => ['required', 'string', 'in:user,assistant,system'],
+            'messages.*.parts' => ['required', 'array', 'min:1'],
+            'messages.*.parts.*.type' => ['required', 'string'],
+            'messages.*.parts.*.text' => ['required_with:messages.*.parts.*.type,text', 'string', 'max:10000'],
             'provider' => ['nullable', 'string'],
             'model' => ['nullable', 'string'],
         ]);
 
+        $message = collect($validated['messages'])
+            ->where('role', 'user')
+            ->last()['parts'][0]['text'] ?? '';
+
+        $provider = $validated['provider'] ?? null;
+        $model = $validated['model'] ?? null;
+
         $agent = new ChatAgent(
-            provider: $validated['provider'] ?? null,
-            model: $validated['model'] ?? null,
+            provider: $provider,
+            model: $model,
         );
+
+        $aiRequest = $this->logRequestStart($request, null, $provider, $model);
 
         $response = $agent
             ->forUser($request->user())
-            ->stream($validated['message'])
+            ->stream($message, provider: $provider, model: $model)
+            ->then(function ($response) use ($aiRequest) {
+                $this->completeRequest($aiRequest, $response);
+            })
             ->usingVercelDataProtocol();
 
         return $response;
@@ -49,16 +66,32 @@ class ChatController extends Controller
 
         $conversations = $this->getConversations($request);
 
+        $conversationMessages = $conversationModel->messages()
+            ->orderBy('created_at')
+            ->get()
+            ->map(fn ($message) => [
+                'id' => $message->id,
+                'role' => $message->role,
+                'parts' => [
+                    ['type' => 'text', 'text' => $message->content],
+                ],
+            ])->all();
+
         return Inertia::render('chat/Index', [
             'conversations' => $conversations,
             'activeConversationId' => $conversation,
+            'initialMessages' => $conversationMessages,
         ]);
     }
 
     public function messages(Request $request, string $conversation)
     {
         $validated = $request->validate([
-            'message' => ['required', 'string', 'max:10000'],
+            'messages' => ['required', 'array', 'min:1'],
+            'messages.*.role' => ['required', 'string', 'in:user,assistant,system'],
+            'messages.*.parts' => ['required', 'array', 'min:1'],
+            'messages.*.parts.*.type' => ['required', 'string'],
+            'messages.*.parts.*.text' => ['required_with:messages.*.parts.*.type,text', 'string', 'max:10000'],
             'provider' => ['nullable', 'string'],
             'model' => ['nullable', 'string'],
         ]);
@@ -68,14 +101,26 @@ class ChatController extends Controller
             ->where('id', $conversation)
             ->firstOrFail();
 
+        $message = collect($validated['messages'])
+            ->where('role', 'user')
+            ->last()['parts'][0]['text'] ?? '';
+
+        $provider = $validated['provider'] ?? null;
+        $model = $validated['model'] ?? null;
+
         $agent = new ChatAgent(
-            provider: $validated['provider'] ?? null,
-            model: $validated['model'] ?? null,
+            provider: $provider,
+            model: $model,
         );
+
+        $aiRequest = $this->logRequestStart($request, $conversation, $provider, $model);
 
         $response = $agent
             ->continue($conversation, as: $request->user())
-            ->stream($validated['message'])
+            ->stream($message, provider: $provider, model: $model)
+            ->then(function ($response) use ($aiRequest) {
+                $this->completeRequest($aiRequest, $response);
+            })
             ->usingVercelDataProtocol();
 
         return $response;
@@ -97,6 +142,40 @@ class ChatController extends Controller
     public function conversations(Request $request)
     {
         return response()->json($this->getConversations($request));
+    }
+
+    private function logRequestStart(Request $request, ?string $conversationId, ?string $provider, ?string $model): AiRequest
+    {
+        $aiRequest = AiRequest::create([
+            'user_id' => $request->user()->id,
+            'conversation_id' => $conversationId,
+            'provider' => $provider,
+            'model' => $model,
+            'status' => 'processing',
+            'started_at' => now(),
+        ]);
+
+        AiRequestUpdated::dispatch($aiRequest);
+
+        return $aiRequest;
+    }
+
+    private function completeRequest(AiRequest $aiRequest, $response): void
+    {
+        $usage = $response->usage ?? null;
+
+        $aiRequest->update([
+            'status' => 'completed',
+            'completed_at' => now(),
+            'duration_ms' => $aiRequest->started_at->diffInMilliseconds(now()),
+            'prompt_tokens' => $usage?->promptTokens ?? null,
+            'completion_tokens' => $usage?->completionTokens ?? null,
+            'total_tokens' => $usage?->totalTokens ?? null,
+        ]);
+
+        $aiRequest->refresh();
+
+        AiRequestUpdated::dispatch($aiRequest);
     }
 
     /**
