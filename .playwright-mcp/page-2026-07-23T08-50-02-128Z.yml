@@ -1,0 +1,50 @@
+- generic [ref=f12e3]:
+  - generic [ref=f12e6]:
+    - generic [ref=f12e7]:
+      - list [ref=f12e8]:
+        - listitem [ref=f12e9]:
+          - link "Laravel" [ref=f12e10] [cursor=pointer]:
+            - /url: /test-users-team-1/dashboard
+      - list [ref=f12e16]:
+        - listitem [ref=f12e17]:
+          - button "Test User's Team" [ref=f12e18]
+    - generic [ref=f12e21]:
+      - generic [ref=f12e22]:
+        - generic [ref=f12e23]: Platform
+        - list [ref=f12e24]:
+          - listitem [ref=f12e25]:
+            - link "Dashboard" [ref=f12e26] [cursor=pointer]:
+              - /url: /test-users-team-1/dashboard
+          - listitem [ref=f12e33]:
+            - link "Chat" [ref=f12e34] [cursor=pointer]:
+              - /url: /chat
+      - generic [ref=f12e38]:
+        - generic [ref=f12e39]: Conversations
+        - list [ref=f12e40]:
+          - listitem [ref=f12e41]:
+            - link "New Chat" [ref=f12e42] [cursor=pointer]:
+              - /url: /chat
+    - generic [ref=f12e44]:
+      - list [ref=f12e47]:
+        - listitem [ref=f12e48]:
+          - link "Repository" [ref=f12e49] [cursor=pointer]:
+            - /url: https://github.com/laravel/vue-starter-kit
+        - listitem [ref=f12e56]:
+          - link "Documentation" [ref=f12e57] [cursor=pointer]:
+            - /url: https://laravel.com/docs/starter-kits#vue
+      - list [ref=f12e61]:
+        - listitem [ref=f12e62]:
+          - button "TU Test User Test User's Team" [ref=f12e63]:
+            - generic [ref=f12e64]: TU
+            - generic [ref=f12e66]:
+              - generic [ref=f12e67]: Test User
+              - generic [ref=f12e68]: Test User's Team
+  - main [ref=f12e72]:
+    - generic [ref=f12e74]:
+      - button "Toggle sidebar" [ref=f12e75]
+      - navigation "breadcrumb" [ref=f12e77]:
+        - list [ref=f12e78]:
+          - listitem [ref=f12e79]:
+            - link "Dashboard" [disabled] [ref=f12e80]
+  - region "Notifications alt+T":
+    - list

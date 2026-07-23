@@ -1,0 +1,97 @@
+- generic:
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - list:
+                - listitem:
+                  - link:
+                    - /url: /test-users-team-1/dashboard
+                    - generic: Laravel
+              - list:
+                - listitem:
+                  - button:
+                    - generic: Test User's Team
+            - generic:
+              - generic:
+                - generic: Platform
+                - list:
+                  - listitem:
+                    - link:
+                      - /url: /test-users-team-1/dashboard
+                      - generic: Dashboard
+                  - listitem:
+                    - link:
+                      - /url: /chat
+                      - generic: Chat
+              - generic:
+                - generic: Conversations
+                - list:
+                  - listitem:
+                    - link:
+                      - /url: /chat
+                      - generic: New Chat
+            - generic:
+              - generic:
+                - generic:
+                  - list:
+                    - listitem:
+                      - link:
+                        - /url: https://github.com/laravel/vue-starter-kit
+                        - generic: Repository
+                    - listitem:
+                      - link:
+                        - /url: https://laravel.com/docs/starter-kits#vue
+                        - generic: Documentation
+              - list:
+                - listitem:
+                  - button:
+                    - generic: TU
+                    - generic:
+                      - generic: Test User
+                      - generic: Test User's Team
+      - main:
+        - generic:
+          - generic:
+            - button:
+              - generic: Toggle sidebar
+        - generic:
+          - generic:
+            - generic:
+              - heading [level=1]: New Chat
+              - button [expanded]:
+                - generic: Ollama (Local)
+                - generic: / qwen3.5:4b
+            - generic:
+              - generic:
+                - generic:
+                  - heading [level=2]: How can I help you today?
+                  - paragraph: Ask me anything, or choose a conversation from the sidebar.
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - textbox:
+                      - /placeholder: Send a message...
+                    - button [disabled]
+                  - paragraph: AI can make mistakes. Check important info.
+      - region "Notifications alt+T":
+        - list
+  - menu "Ollama (Local) / qwen3.5:4b" [active] [ref=f14e110]:
+    - generic [ref=f14e111]: Provider
+    - menuitem "Default" [ref=f14e112]
+    - menuitem "Ollama (Local)" [ref=f14e114]
+    - menuitem "Ollama (Cloud)" [ref=f14e116]
+    - menuitem "OpenAI" [ref=f14e118]
+    - menuitem "Anthropic" [ref=f14e120]
+    - menuitem "Gemini" [ref=f14e122]
+    - separator [ref=f14e124]
+    - generic [ref=f14e125]: Model
+    - menuitem "qwen3.5:4b" [ref=f14e126]
+    - menuitem "llama3.2" [ref=f14e128]
+    - menuitem "llama3.1" [ref=f14e130]
+    - menuitem "codellama" [ref=f14e132]
+    - menuitem "mistral" [ref=f14e134]
+    - menuitem "phi3" [ref=f14e136]

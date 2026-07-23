@@ -1,0 +1,9 @@
+[      61ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:8000/_boost/browser-logs @ http://localhost:8000/register:111
+[     159ms] [WARNING] [Vue warn]: Missing required prop: "passwordRules" 
+  at <Register errors= {} name="Laravel" auth= {user: null}  ... > 
+  at <AuthSimpleLayout title="Create an account" description="Enter your details below to create your account" > 
+  at <AuthLayout errors= {} name="Laravel" auth= {user: null}  ... > 
+  at <Inertia initialPage= {component: auth/Register, props: Object, url: /register, version: 7f77847d17f84aee6805bc124f7b6898, sharedProps: Array(6)} initialComponent= {layout: Object, __name: Register, props: Object, setup: , __hmrId: 38af45a9} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/register:181
+[    9618ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://localhost:8000/1/dashboard:0
+[    9636ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:8000/_boost/browser-logs @ about:srcdoc:22

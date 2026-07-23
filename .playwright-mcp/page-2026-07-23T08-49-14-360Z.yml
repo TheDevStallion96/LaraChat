@@ -1,0 +1,63 @@
+- generic [ref=f11e3]:
+  - generic [ref=f11e6]:
+    - generic [ref=f11e7]:
+      - list [ref=f11e8]:
+        - listitem [ref=f11e9]:
+          - link "Laravel" [ref=f11e10] [cursor=pointer]:
+            - /url: /test-users-team-1/dashboard
+      - list [ref=f11e14]:
+        - listitem [ref=f11e15]:
+          - button "Test User's Team" [ref=f11e86]
+    - generic [ref=f11e17]:
+      - generic [ref=f11e18]:
+        - generic [ref=f11e19]: Platform
+        - list [ref=f11e20]:
+          - listitem [ref=f11e21]:
+            - link "Dashboard" [ref=f11e22] [cursor=pointer]:
+              - /url: /test-users-team-1/dashboard
+          - listitem [ref=f11e28]:
+            - link "Chat" [active] [ref=f11e29] [cursor=pointer]:
+              - /url: /chat
+      - generic [ref=f11e32]:
+        - generic [ref=f11e33]: Conversations
+        - list [ref=f11e34]:
+          - listitem [ref=f11e35]:
+            - link "New Chat" [ref=f11e36] [cursor=pointer]:
+              - /url: /chat
+    - generic [ref=f11e38]:
+      - list [ref=f11e41]:
+        - listitem [ref=f11e42]:
+          - link "Repository" [ref=f11e43] [cursor=pointer]:
+            - /url: https://github.com/laravel/vue-starter-kit
+        - listitem [ref=f11e49]:
+          - link "Documentation" [ref=f11e50] [cursor=pointer]:
+            - /url: https://laravel.com/docs/starter-kits#vue
+      - list [ref=f11e53]:
+        - listitem [ref=f11e54]:
+          - button "TU Test User Test User's Team" [ref=f11e55]:
+            - generic [ref=f11e56]: TU
+            - generic [ref=f11e93]:
+              - generic [ref=f11e94]: Test User
+              - generic [ref=f11e95]: Test User's Team
+  - main [ref=f11e61]:
+    - button "Toggle sidebar" [ref=f11e64]
+    - generic [ref=f11e96]:
+      - generic [ref=f11e97]:
+        - generic [ref=f11e98]:
+          - generic [ref=f11e99]: Conversations
+          - button [ref=f11e100]
+        - paragraph [ref=f11e103]: No conversations yet.
+      - generic [ref=f11e104]:
+        - generic [ref=f11e105]:
+          - heading "New Chat" [level=1] [ref=f11e106]
+          - button "Default" [ref=f11e107]
+        - generic [ref=f11e111]:
+          - heading "How can I help you today?" [level=2] [ref=f11e112]
+          - paragraph [ref=f11e113]: Ask me anything, or choose a conversation from the sidebar.
+        - generic [ref=f11e116]:
+          - generic [ref=f11e117]:
+            - textbox "Send a message..." [ref=f11e118]
+            - button [disabled]
+          - paragraph [ref=f11e119]: AI can make mistakes. Check important info.
+  - region "Notifications alt+T":
+    - list

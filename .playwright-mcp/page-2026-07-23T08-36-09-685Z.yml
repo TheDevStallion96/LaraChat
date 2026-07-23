@@ -1,0 +1,56 @@
+- generic [ref=f8e3]:
+  - generic [ref=f8e6]:
+    - generic [ref=f8e7]:
+      - list [ref=f8e8]:
+        - listitem [ref=f8e9]:
+          - link "Laravel" [ref=f8e10] [cursor=pointer]:
+            - /url: /test-users-team-1/dashboard
+      - list [ref=f8e14]:
+        - listitem [ref=f8e15]:
+          - button "Test User's Team" [ref=f8e80]
+    - generic [ref=f8e18]:
+      - generic [ref=f8e19]: Platform
+      - list [ref=f8e20]:
+        - listitem [ref=f8e21]:
+          - link "Dashboard" [ref=f8e22] [cursor=pointer]:
+            - /url: /test-users-team-1/dashboard
+        - listitem [ref=f8e28]:
+          - link "Chat" [active] [ref=f8e29] [cursor=pointer]:
+            - /url: /chat
+    - generic [ref=f8e32]:
+      - list [ref=f8e35]:
+        - listitem [ref=f8e36]:
+          - link "Repository" [ref=f8e37] [cursor=pointer]:
+            - /url: https://github.com/laravel/vue-starter-kit
+        - listitem [ref=f8e43]:
+          - link "Documentation" [ref=f8e44] [cursor=pointer]:
+            - /url: https://laravel.com/docs/starter-kits#vue
+      - list [ref=f8e47]:
+        - listitem [ref=f8e48]:
+          - button "TU Test User Test User's Team" [ref=f8e49]:
+            - generic [ref=f8e50]: TU
+            - generic [ref=f8e87]:
+              - generic [ref=f8e88]: Test User
+              - generic [ref=f8e89]: Test User's Team
+  - main [ref=f8e55]:
+    - button "Toggle sidebar" [ref=f8e58]
+    - generic [ref=f8e90]:
+      - generic [ref=f8e91]:
+        - generic [ref=f8e92]:
+          - generic [ref=f8e93]: Conversations
+          - button [ref=f8e94]
+        - paragraph [ref=f8e97]: No conversations yet.
+      - generic [ref=f8e98]:
+        - generic [ref=f8e99]:
+          - heading "New Chat" [level=1] [ref=f8e100]
+          - button "Default" [ref=f8e101]
+        - generic [ref=f8e105]:
+          - heading "How can I help you today?" [level=2] [ref=f8e106]
+          - paragraph [ref=f8e107]: Ask me anything, or choose a conversation from the sidebar.
+        - generic [ref=f8e110]:
+          - generic [ref=f8e111]:
+            - textbox "Send a message..." [ref=f8e112]
+            - button [disabled]
+          - paragraph [ref=f8e113]: AI can make mistakes. Check important info.
+  - region "Notifications alt+T":
+    - list

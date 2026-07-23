@@ -1,0 +1,80 @@
+[     106ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:8000/_boost/browser-logs @ http://localhost:8000/chat:111
+[   74253ms] [WARNING] [Vue warn]: Unhandled error during execution of setup function 
+  at <MessageContent content="hello" > 
+  at <ChatMessage key="SAnbUhRdP9jcLxQ7" message= {parts: Array(1), id: SAnbUhRdP9jcLxQ7, role: user, metadata: undefined} > 
+  at <Index errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset key=0 class="overflow-x-hidden" > 
+  at <AppContent variant="sidebar" class="overflow-x-hidden" > 
+  at <TooltipProvider delay-duration=0 > 
+  at <SidebarProvider key=1 default-open=true > 
+  at <AppShell variant="sidebar" > 
+  at <AppSidebarLayout breadcrumbs= [] > 
+  at <AppLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: chat/Index, props: Object, url: /chat, version: eb1310b41227fd42b7bcae4090195d1b, sharedProps: Array(7)} initialComponent= {__name: Index, props: Object, setup: , __hmrId: 7626e9c8, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/chat:181
+[   74254ms] [WARNING] [Vue warn]: Unhandled error during execution of component update 
+  at <Index errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset key=0 class="overflow-x-hidden" > 
+  at <AppContent variant="sidebar" class="overflow-x-hidden" > 
+  at <TooltipProvider delay-duration=0 > 
+  at <SidebarProvider key=1 default-open=true > 
+  at <AppShell variant="sidebar" > 
+  at <AppSidebarLayout breadcrumbs= [] > 
+  at <AppLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: chat/Index, props: Object, url: /chat, version: eb1310b41227fd42b7bcae4090195d1b, sharedProps: Array(7)} initialComponent= {__name: Index, props: Object, setup: , __hmrId: 7626e9c8, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/chat:181
+[   74259ms] Error: renderer 'inlineCode' does not exist
+    at http://[::1]:5173/node_modules/.vite/deps/marked.js?v=29066502:1464:27
+    at Array.forEach (<anonymous>)
+    at D.use (http://[::1]:5173/node_modules/.vite/deps/marked.js?v=29066502:1444:12)
+    at g.use (http://[::1]:5173/node_modules/.vite/deps/marked.js?v=29066502:1588:11)
+    at setup (http://[::1]:5173/resources/js/pages/chat/components/MessageContent.vue?t=1784737725515:28:10)
+    at callWithErrorHandling (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-D58j8KZH.js?v=29066502:1898:17)
+    at setupStatefulComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-D58j8KZH.js?v=29066502:6797:23)
+    at setupComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-D58j8KZH.js?v=29066502:6773:35)
+    at mountComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-D58j8KZH.js?v=29066502:5561:3)
+    at processComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-D58j8KZH.js?v=29066502:5551:8)
+[   74269ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:8000/api/chat:0
+[   74271ms] [WARNING] [Vue warn]: Unhandled error during execution of component update 
+  at <Index errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset key=0 class="overflow-x-hidden" > 
+  at <AppContent variant="sidebar" class="overflow-x-hidden" > 
+  at <TooltipProvider delay-duration=0 > 
+  at <SidebarProvider key=1 default-open=true > 
+  at <AppShell variant="sidebar" > 
+  at <AppSidebarLayout breadcrumbs= [] > 
+  at <AppLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: chat/Index, props: Object, url: /chat, version: eb1310b41227fd42b7bcae4090195d1b, sharedProps: Array(7)} initialComponent= {__name: Index, props: Object, setup: , __hmrId: 7626e9c8, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/chat:181
+[   74274ms] TypeError: Cannot read properties of null (reading 'emitsOptions')
+    at shouldUpdateComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-D58j8KZH.js?v=29066502:4868:26)
+    at updateComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-D58j8KZH.js?v=29066502:5577:7)
+    at processComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-D58j8KZH.js?v=29066502:5552:8)
+    at patch (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-D58j8KZH.js?v=29066502:5342:28)
+    at patchBlockChildren (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-D58j8KZH.js?v=29066502:5512:4)
+    at patchElement (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-D58j8KZH.js?v=29066502:5478:4)
+    at processElement (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-D58j8KZH.js?v=29066502:5400:5)
+    at patch (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-D58j8KZH.js?v=29066502:5341:32)
+    at ReactiveEffect.componentUpdateFn [as fn] (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-D58j8KZH.js?v=29066502:5666:5)
+    at ReactiveEffect.run (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-D58j8KZH.js?v=29066502:435:16)
+[   74306ms] [WARNING] [Vue warn]: Slot "default" invoked outside of the render function: this will not track dependencies used in the slot. Invoke the slot function inside the render function instead. 
+  at <SidebarInset key=0 class="overflow-x-hidden" > 
+  at <AppContent variant="sidebar" class="overflow-x-hidden" > 
+  at <TooltipProvider delay-duration=0 > 
+  at <SidebarProvider key=1 default-open=true > 
+  at <AppShell variant="sidebar" > 
+  at <AppSidebarLayout breadcrumbs= [] > 
+  at <AppLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: chat/Index, props: Object, url: /chat, version: eb1310b41227fd42b7bcae4090195d1b, sharedProps: Array(7)} initialComponent= {__name: Index, props: Object, setup: , __hmrId: 7626e9c8, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/chat:181
+[ 2679824ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:8000/_boost/browser-logs @ http://localhost:8000/chat:111
+[ 2690842ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:8000/_boost/browser-logs @ http://localhost:8000/chat:111
+[ 2696678ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:8000/_boost/browser-logs @ http://localhost:8000/chat:111
+[ 2718930ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://[::1]:5173/__laravel_vite_plugin__/fonts/c163460de7fe7e01.woff2:0
+[ 2718931ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://[::1]:5173/__laravel_vite_plugin__/fonts/b8133555b5523a07.woff2:0
+[ 2718931ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://[::1]:5173/__laravel_vite_plugin__/fonts/84be54880946cb28.woff2:0
+[ 2718931ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://[::1]:5173/resources/css/app.css:0
+[ 2718935ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://[::1]:5173/@vite/client:0
+[ 2718935ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://[::1]:5173/resources/js/app.ts:0
+[ 2718935ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://[::1]:5173/resources/js/pages/chat/Index.vue:0
+[ 2718939ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:8000/_boost/browser-logs @ http://localhost:8000/chat:110

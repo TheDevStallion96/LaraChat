@@ -1,0 +1,65 @@
+- generic:
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - list:
+                - listitem:
+                  - link:
+                    - /url: /test-users-team/dashboard
+                    - generic: Laravel
+              - list:
+                - listitem:
+                  - button:
+                    - generic: Test User's Team
+            - generic:
+              - generic:
+                - generic: Platform
+                - list:
+                  - listitem:
+                    - link:
+                      - /url: /test-users-team/dashboard
+                      - generic: Dashboard
+            - generic:
+              - generic:
+                - generic:
+                  - list:
+                    - listitem:
+                      - link:
+                        - /url: https://github.com/laravel/vue-starter-kit
+                        - generic: Repository
+                    - listitem:
+                      - link:
+                        - /url: https://laravel.com/docs/starter-kits#vue
+                        - generic: Documentation
+              - list:
+                - listitem:
+                  - button [expanded]:
+                    - generic: TU
+                    - generic:
+                      - generic: Test User
+                      - generic: Test User's Team
+      - main:
+        - generic:
+          - generic:
+            - button:
+              - generic: Toggle sidebar
+            - navigation:
+              - list:
+                - listitem:
+                  - link [disabled]: Dashboard
+      - region "Notifications alt+T":
+        - list
+  - menu "TU Test User Test User's Team" [active] [ref=f1e123]:
+    - generic [ref=f1e125]:
+      - generic [ref=f1e126]: TU
+      - generic [ref=f1e128]:
+        - generic [ref=f1e129]: Test User
+        - generic [ref=f1e130]: test@example.com
+    - separator [ref=f1e131]
+    - group [ref=f1e132]:
+      - menuitem "Settings" [ref=f1e133] [cursor=pointer]
+    - separator [ref=f1e134]
+    - menuitem "Log out" [ref=f1e135] [cursor=pointer]

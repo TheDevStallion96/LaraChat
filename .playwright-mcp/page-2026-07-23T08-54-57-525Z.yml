@@ -1,0 +1,59 @@
+- generic [ref=f14e3]:
+  - generic [ref=f14e6]:
+    - generic [ref=f14e7]:
+      - list [ref=f14e8]:
+        - listitem [ref=f14e9]:
+          - link "Laravel" [ref=f14e10] [cursor=pointer]:
+            - /url: /test-users-team-1/dashboard
+      - list [ref=f14e16]:
+        - listitem [ref=f14e17]:
+          - button "Test User's Team" [ref=f14e18]
+    - generic [ref=f14e21]:
+      - generic [ref=f14e22]:
+        - generic [ref=f14e23]: Platform
+        - list [ref=f14e24]:
+          - listitem [ref=f14e25]:
+            - link "Dashboard" [ref=f14e26] [cursor=pointer]:
+              - /url: /test-users-team-1/dashboard
+          - listitem [ref=f14e33]:
+            - link "Chat" [ref=f14e34] [cursor=pointer]:
+              - /url: /chat
+      - generic [ref=f14e38]:
+        - generic [ref=f14e39]: Conversations
+        - list [ref=f14e40]:
+          - listitem [ref=f14e41]:
+            - link "New Chat" [ref=f14e42] [cursor=pointer]:
+              - /url: /chat
+    - generic [ref=f14e44]:
+      - list [ref=f14e47]:
+        - listitem [ref=f14e48]:
+          - link "Repository" [ref=f14e49] [cursor=pointer]:
+            - /url: https://github.com/laravel/vue-starter-kit
+        - listitem [ref=f14e56]:
+          - link "Documentation" [ref=f14e57] [cursor=pointer]:
+            - /url: https://laravel.com/docs/starter-kits#vue
+      - list [ref=f14e61]:
+        - listitem [ref=f14e62]:
+          - button "TU Test User Test User's Team" [ref=f14e63]:
+            - generic [ref=f14e64]: TU
+            - generic [ref=f14e66]:
+              - generic [ref=f14e67]: Test User
+              - generic [ref=f14e68]: Test User's Team
+  - main [ref=f14e72]:
+    - button "Toggle sidebar" [ref=f14e75]
+    - generic [ref=f14e78]:
+      - generic [ref=f14e79]:
+        - heading "New Chat" [level=1] [ref=f14e80]
+        - button "Ollama (Local) / qwen3.5:4b" [active] [ref=f14e108]:
+          - generic [ref=f14e82]: Ollama (Local)
+          - generic [ref=f14e109]: / qwen3.5:4b
+      - generic [ref=f14e85]:
+        - heading "How can I help you today?" [level=2] [ref=f14e86]
+        - paragraph [ref=f14e87]: Ask me anything, or choose a conversation from the sidebar.
+      - generic [ref=f14e90]:
+        - generic [ref=f14e91]:
+          - textbox "Send a message..." [ref=f14e92]
+          - button [disabled]
+        - paragraph [ref=f14e93]: AI can make mistakes. Check important info.
+  - region "Notifications alt+T":
+    - list

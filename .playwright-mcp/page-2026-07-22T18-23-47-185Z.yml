@@ -1,0 +1,40 @@
+- generic [ref=f1e42]:
+  - generic [ref=f1e45]:
+    - generic [ref=f1e46]:
+      - list [ref=f1e47]:
+        - listitem [ref=f1e48]:
+          - link "Laravel" [ref=f1e49] [cursor=pointer]:
+            - /url: /test-users-team/dashboard
+      - list [ref=f1e55]:
+        - listitem [ref=f1e56]:
+          - button "Test User's Team" [ref=f1e57]
+    - generic [ref=f1e61]:
+      - generic [ref=f1e62]: Platform
+      - list [ref=f1e63]:
+        - listitem [ref=f1e64]:
+          - link "Dashboard" [ref=f1e65] [cursor=pointer]:
+            - /url: /test-users-team/dashboard
+    - generic [ref=f1e72]:
+      - list [ref=f1e75]:
+        - listitem [ref=f1e76]:
+          - link "Repository" [ref=f1e77] [cursor=pointer]:
+            - /url: https://github.com/laravel/vue-starter-kit
+        - listitem [ref=f1e84]:
+          - link "Documentation" [ref=f1e85] [cursor=pointer]:
+            - /url: https://laravel.com/docs/starter-kits#vue
+      - list [ref=f1e89]:
+        - listitem [ref=f1e90]:
+          - button "TU Test User Test User's Team" [ref=f1e91]:
+            - generic [ref=f1e92]: TU
+            - generic [ref=f1e94]:
+              - generic [ref=f1e95]: Test User
+              - generic [ref=f1e96]: Test User's Team
+  - main [ref=f1e100]:
+    - generic [ref=f1e102]:
+      - button "Toggle sidebar" [ref=f1e103]
+      - navigation "breadcrumb" [ref=f1e105]:
+        - list [ref=f1e106]:
+          - listitem [ref=f1e107]:
+            - link "Dashboard" [disabled] [ref=f1e108]
+  - region "Notifications alt+T":
+    - list

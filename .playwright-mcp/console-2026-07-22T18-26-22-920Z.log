@@ -1,0 +1,15 @@
+[      95ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:8000/_boost/browser-logs @ http://localhost:8000/register:111
+[     240ms] [WARNING] [Vue warn]: Missing required prop: "passwordRules" 
+  at <Register errors= {} name="Laravel" auth= {user: null}  ... > 
+  at <AuthSimpleLayout title="Create an account" description="Enter your details below to create your account" > 
+  at <AuthLayout errors= {} name="Laravel" auth= {user: null}  ... > 
+  at <Inertia initialPage= {component: auth/Register, props: Object, url: /register, version: 7f77847d17f84aee6805bc124f7b6898, sharedProps: Array(6)} initialComponent= {layout: Object, __name: Register, props: Object, setup: , __hmrId: 38af45a9} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/register:181
+[ 3663292ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:8000/register:181
+[ 3663471ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:8000/_boost/browser-logs @ http://localhost:8000/jane-smiths-team/dashboard:111
+[40965283ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:8000/jane-smiths-team/dashboard:181
+[40965500ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:8000/_boost/browser-logs @ http://localhost:8000/login:111
+[45628152ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:8000/login:181
+[45628240ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:8000/_boost/browser-logs @ http://localhost:8000/login:111
+[45628333ms] [ERROR] Failed to load resource: net::ERR_NETWORK_CHANGED @ http://[::1]:5173/resources/js/components/ui/sheet/index.ts:0
+[45628333ms] [ERROR] Failed to load resource: net::ERR_NETWORK_CHANGED @ http://[::1]:5173/resources/js/components/ui/sheet/SheetDescription.vue:0
