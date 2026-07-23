@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import * as echarts from 'echarts/core'
 import { LineChart } from 'echarts/charts'
 import { TitleComponent, TooltipComponent, GridComponent, LegendComponent } from 'echarts/components'
+import * as echarts from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
 
@@ -55,6 +55,7 @@ let resizeObserver: ResizeObserver | null = null
 
 const processedData = computed(() => {
   const data = props.data.slice(-props.maxPoints)
+
   return {
     xAxis: data.map(d => new Date((d[props.labelKey] as number) * 1000).toLocaleTimeString()),
     series: data.map(d => (d[props.valueKey] as number) ?? 0),
@@ -63,7 +64,9 @@ const processedData = computed(() => {
 })
 
 const initChart = () => {
-  if (!chartRef.value || chartInstance) return
+  if (!chartRef.value || chartInstance) {
+return
+}
 
   chartInstance = echarts.init(chartRef.value)
   chartInstance.setOption(getOption())
@@ -86,6 +89,7 @@ const getOption = () => {
         params.forEach(p => {
           result += `${p.marker} ${p.seriesName}: ${p.value}${props.unit}<br/>`
         })
+
         return result
       },
     },

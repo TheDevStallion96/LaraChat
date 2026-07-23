@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { MessageSquare, Plus } from '@lucide/vue';
 import { usePage } from '@inertiajs/vue3';
+import { MessageSquare, Plus } from '@lucide/vue';
 import { Button } from '@/components/ui/button';
 import {
     SidebarGroup,

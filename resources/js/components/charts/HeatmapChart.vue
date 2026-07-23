@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import * as echarts from 'echarts/core'
 import { HeatmapChart } from 'echarts/charts'
 import { TitleComponent, TooltipComponent, GridComponent, VisualMapComponent } from 'echarts/components'
+import * as echarts from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
 
@@ -50,7 +50,9 @@ let resizeObserver: ResizeObserver | null = null
 const maxValue = computed(() => Math.max(...props.data.map(d => d.value), 1))
 
 const initChart = () => {
-  if (!chartRef.value || chartInstance) return
+  if (!chartRef.value || chartInstance) {
+return
+}
 
   chartInstance = echarts.init(chartRef.value)
   chartInstance.setOption(getOption())
@@ -67,6 +69,7 @@ const getOption = () => ({
     position: 'top',
     formatter: (params: any) => {
       const data = params.data
+
       return `${props.yLabels[data[1]]} / ${props.xLabels[data[0]]}<br/>${data[2]}${props.unit}${data[3] ? ` (${data[3]})` : ''}`
     },
   },

@@ -49,7 +49,7 @@ const toolOptions: Array<{ id: ToolName; label: string; description: string; pro
 ];
 
 const providers = [
-    { id: '', name: 'Default' },
+    { id: 'default', name: 'Default' },
     { id: 'ollama', name: 'Ollama (Local)' },
     { id: 'ollama-cloud', name: 'Ollama (Cloud)' },
     { id: 'openai', name: 'OpenAI' },
@@ -58,7 +58,7 @@ const providers = [
 ];
 
 const modelsByProvider: Record<string, string[]> = {
-    '': [],
+    default: [],
     ollama: ['qwen3.5:4b', 'llama3.2', 'llama3.1', 'codellama', 'mistral', 'phi3'],
     'ollama-cloud': ['llama3.2', 'llama3.1', 'codellama', 'mistral'],
     openai: ['gpt-4o', 'gpt-4o-mini', 'gpt-4.1', 'gpt-4.1-mini', 'o3-mini'],
@@ -96,9 +96,9 @@ function onInstructionsInput() {
         class="fixed inset-y-0 right-0 z-40 flex translate-x-0 transition-transform duration-300"
         :class="open ? 'translate-x-0' : 'translate-x-full'"
     >
-        <div class="flex h-full w-72 flex-col border-l border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
-            <div class="flex items-center justify-between border-b border-neutral-200 px-4 py-3 dark:border-neutral-700">
-                <h2 class="text-sm font-semibold text-neutral-800 dark:text-neutral-200">
+        <div class="flex h-full w-72 flex-col border-l bg-background">
+            <div class="flex items-center justify-between border-b px-4 py-3">
+                <h2 class="text-sm font-semibold text-foreground">
                     Configuration
                 </h2>
                 <Button
@@ -113,12 +113,12 @@ function onInstructionsInput() {
 
             <div class="flex-1 overflow-y-auto px-4 py-4 space-y-6">
                 <div class="space-y-3">
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                    <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         Model
                     </h3>
 
                     <div class="space-y-2">
-                        <Label class="text-xs text-neutral-600 dark:text-neutral-400">Provider</Label>
+                        <Label class="text-xs text-muted-foreground">Provider</Label>
                         <Select
                             :model-value="provider"
                             @update:model-value="emit('update:provider', $event)"
@@ -139,7 +139,7 @@ function onInstructionsInput() {
                     </div>
 
                     <div v-if="availableModels.length > 0" class="space-y-2">
-                        <Label class="text-xs text-neutral-600 dark:text-neutral-400">Model</Label>
+                        <Label class="text-xs text-muted-foreground">Model</Label>
                         <Select
                             :model-value="model"
                             @update:model-value="emit('update:model', $event)"
@@ -161,7 +161,7 @@ function onInstructionsInput() {
                 </div>
 
                 <div class="space-y-3">
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                    <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         Tools
                     </h3>
 
@@ -176,10 +176,10 @@ function onInstructionsInput() {
                             <Label :for="tool.id" class="text-sm font-medium cursor-pointer">
                                 {{ tool.label }}
                             </Label>
-                            <p class="text-xs text-neutral-500 dark:text-neutral-400">
+                            <p class="text-xs text-muted-foreground">
                                 {{ tool.description }}
                             </p>
-                            <p class="text-xs text-neutral-400 dark:text-neutral-500">
+                            <p class="text-xs text-muted-foreground/60">
                                 {{ tool.providers }}
                             </p>
                         </div>
@@ -188,7 +188,7 @@ function onInstructionsInput() {
 
                 <div class="space-y-3">
                     <div class="flex items-center justify-between">
-                        <h3 class="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                        <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                             Custom Instructions
                         </h3>
                         <button
@@ -203,12 +203,12 @@ function onInstructionsInput() {
                     <textarea
                         v-model="localInstructions"
                         placeholder="Override the system prompt with custom instructions for how the AI should behave..."
-                        class="w-full resize-none rounded-lg border border-neutral-300 bg-neutral-50 p-3 text-xs text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-200 dark:placeholder:text-neutral-500"
+                        class="w-full resize-none rounded-lg border border-input bg-background p-3 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                         rows="5"
                         maxlength="2000"
                         @input="onInstructionsInput"
                     />
-                    <p class="text-xs text-neutral-400 dark:text-neutral-500">
+                    <p class="text-xs text-muted-foreground">
                         {{ localInstructions.length }} / 2000 characters
                     </p>
                 </div>

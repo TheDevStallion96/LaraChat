@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, reactive, computed, watch } from 'vue'
+import { Head } from '@inertiajs/vue3'
 import Echo from 'laravel-echo'
 import Pusher from 'pusher-js'
-import { GaugeChart, LineChart, HeatmapChart, TreemapChart, ScatterChart, TimelineChart } from '@/components/charts'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { onMounted, onUnmounted, ref, reactive } from 'vue'
+import { GaugeChart, LineChart, HeatmapChart, TreemapChart, TimelineChart } from '@/components/charts'
+import Heading from '@/components/Heading.vue'
 import { Badge } from '@/components/ui/badge'
-import { cn } from '@/lib/utils'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface MetricData {
   collector: string
@@ -323,6 +324,7 @@ function initEcho() {
 
   if (!pusherKey || !wsHost) {
     console.warn('Reverb configuration not found')
+
     return
   }
 
@@ -360,11 +362,15 @@ function initEcho() {
 
   echo.value.channel('ai-requests').listen('.ai.request.updated', (data: AiRequestData) => {
     const idx = aiRequests.value.findIndex((r) => r.id === data.id)
+
     if (idx !== -1) {
       aiRequests.value[idx] = data
     } else {
       aiRequests.value.unshift(data)
-      if (aiRequests.value.length > 50) aiRequests.value.pop()
+
+      if (aiRequests.value.length > 50) {
+aiRequests.value.pop()
+}
     }
   })
 }
@@ -373,8 +379,12 @@ function updateMetrics(data: SystemMetrics) {
   metrics.timestamp = data.timestamp
 
   Object.keys(data).forEach(key => {
-    if (key === 'timestamp') return
+    if (key === 'timestamp') {
+return
+}
+
     const metric = data[key as keyof SystemMetrics] as MetricData | undefined
+
     if (metric) {
       ;(metrics as any)[key] = metric
       addToHistory(key, metric)
@@ -429,6 +439,7 @@ function addToHistory(collector: string, metric: MetricData) {
 
   if (value !== null) {
     history[collector].push({ timestamp: metric.timestamp, value })
+
     if (history[collector].length > MAX_HISTORY_POINTS) {
       history[collector].shift()
     }
@@ -437,6 +448,7 @@ function addToHistory(collector: string, metric: MetricData) {
 
 function addEvent(event: { timestamp: number; type: string; message: string; severity: 'success' | 'info' | 'warning' | 'critical'; source: string }) {
   events.value.push(event)
+
   if (events.value.length > 100) {
     events.value.shift()
   }
@@ -448,23 +460,52 @@ function getHistory(collector: string) {
 
 function getHistoryForChart(collector: string) {
   const data = getHistory(collector)
+
   return data.map(d => ({ timestamp: d.timestamp, value: d.value }))
 }
 
 function formatBytes(bytes: number): string {
-  if (bytes === 0) return '0 B'
+  if (bytes === 0) {
+return '0 B'
+}
+
   const k = 1024
   const sizes = ['B', 'KB', 'MB', 'GB', 'TB']
   const i = Math.floor(Math.log(bytes) / Math.log(k))
+
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
 }
 
 function formatNumber(num: number): string {
-  if (num >= 1e9) return (num / 1e9).toFixed(1) + 'B'
-  if (num >= 1e6) return (num / 1e6).toFixed(1) + 'M'
-  if (num >= 1e3) return (num / 1e3).toFixed(1) + 'K'
+  if (num >= 1e9) {
+return (num / 1e9).toFixed(1) + 'B'
+}
+
+  if (num >= 1e6) {
+return (num / 1e6).toFixed(1) + 'M'
+}
+
+  if (num >= 1e3) {
+return (num / 1e3).toFixed(1) + 'K'
+}
+
   return num.toString()
 }
+
+import { monitoring } from '@/routes';
+
+defineOptions({
+  layout: (props: { currentTeam?: { slug: string } | null }) => ({
+    breadcrumbs: [
+      {
+        title: 'Monitoring',
+        href: props.currentTeam
+          ? monitoring(props.currentTeam.slug)
+          : '/',
+      },
+    ],
+  }),
+});
 
 onMounted(() => {
   initEcho()
@@ -476,14 +517,22 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <Head title="System Monitoring" />
+
+  <h1 class="sr-only">System Monitoring</h1>
+
   <div class="space-y-6">
     <!-- Header -->
     <div class="flex items-center justify-between">
       <div>
-        <h1 class="text-3xl font-bold tracking-tight">System Monitoring</h1>
-        <p class="text-muted-foreground">Real-time system metrics and performance monitoring</p>
+        <Heading
+          title="System Monitoring"
+          description="Real-time system metrics and performance monitoring"
+        />
       </div>
-      <Badge :class="connected ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
+      <Badge :class="connected
+        ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+        : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'">
         {{ connected ? 'Connected' : 'Disconnected' }}
       </Badge>
     </div>

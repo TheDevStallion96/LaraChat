@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import * as echarts from 'echarts/core'
 import { ScatterChart } from 'echarts/charts'
 import { TitleComponent, TooltipComponent, GridComponent, LegendComponent, VisualMapComponent } from 'echarts/components'
+import * as echarts from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
 
@@ -56,7 +56,9 @@ let resizeObserver: ResizeObserver | null = null
 const allData = computed(() => props.series.flatMap(s => s.data))
 
 const initChart = () => {
-  if (!chartRef.value || chartInstance) return
+  if (!chartRef.value || chartInstance) {
+return
+}
 
   chartInstance = echarts.init(chartRef.value)
   chartInstance.setOption(getOption())
@@ -78,12 +80,15 @@ const getOption = () => {
         let result = `<strong>${params.seriesName}</strong><br/>`
         result += `${props.xAxisLabel}: ${data[0]}<br/>`
         result += `${props.yAxisLabel}: ${data[1]}<br/>`
+
         if (data[2] !== undefined) {
           result += `Value: ${data[2]}`
         }
+
         if (data.name) {
           result += `<br/>Name: ${data.name}`
         }
+
         return result
       },
     },
