@@ -22,7 +22,7 @@ renderer.code = function ({ text, lang }: { text: string; lang?: string }) {
     return `<pre class="hljs rounded-lg bg-neutral-900 p-4 text-sm text-neutral-100 overflow-x-auto"><code class="language-${language}">${highlighted}</code></pre>`;
 };
 
-renderer.inlineCode = function ({ text }: { text: string }) {
+renderer.codespan = function ({ text }: { text: string }) {
     return `<code class="rounded bg-neutral-100 px-1.5 py-0.5 text-sm font-mono text-neutral-800 dark:bg-neutral-800 dark:text-neutral-200">${text}</code>`;
 };
 
