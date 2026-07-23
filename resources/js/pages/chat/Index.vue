@@ -2,6 +2,7 @@
 import { router } from '@inertiajs/vue3';
 import { computed, ref, watch } from 'vue';
 import { useChat } from '@ai-sdk/vue';
+import { DefaultChatTransport } from 'ai';
 import ChatMessage from './components/ChatMessage.vue';
 import ChatInput from './components/ChatInput.vue';
 import ProviderSelector from './components/ProviderSelector.vue';
@@ -12,29 +13,38 @@ type Conversation = {
     updated_at: string;
 };
 
+type AiSdkMessage = {
+    id: string;
+    role: 'user' | 'assistant' | 'system';
+    parts: Array<{ type: 'text'; text: string }>;
+};
+
 const props = defineProps<{
     conversations: Conversation[];
     activeConversationId?: string;
+    initialMessages?: AiSdkMessage[];
 }>();
 
 const conversationId = ref<string | null>(props.activeConversationId ?? null);
-const selectedProvider = ref<string>('');
-const selectedModel = ref<string>('');
+const selectedProvider = ref<string>('ollama');
+const selectedModel = ref<string>('qwen3.5:4b');
 
-const chatApi = computed(() =>
-    conversationId.value ? `/chat/${conversationId.value}/messages` : '/chat',
-);
-
-const { messages, sendMessage, status, stop, setMessages, error } = useChat({
-    api: chatApi,
-    body: computed(() => ({
-        provider: selectedProvider.value || undefined,
-        model: selectedModel.value || undefined,
-    })),
+const { messages, sendMessage, status, stop, setMessages, error } = useChat(() => ({
+    messages: props.initialMessages ?? [],
+    transport: new DefaultChatTransport({
+        api: conversationId.value ? `/chat/${conversationId.value}/messages` : '/chat',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: () => ({
+            provider: selectedProvider.value || undefined,
+            model: selectedModel.value || undefined,
+        }),
+    }),
     onFinish: () => {
         refreshConversations();
     },
-});
+}));
 
 const activeConversation = computed(() =>
     props.conversations.find((c) => c.id === conversationId.value),
