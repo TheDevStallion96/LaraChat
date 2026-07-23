@@ -1,7 +1,8 @@
 <?php
 
-use App\Models\User;
 use App\Ai\Agents\ChatAgent;
+use App\Models\User;
+use Illuminate\Support\Str;
 use Inertia\Testing\AssertableInertia as Assert;
 
 test('guests are redirected to the login page', function () {
@@ -46,7 +47,9 @@ test('authenticated users can create a new conversation', function () {
     $response = $this
         ->actingAs($user)
         ->postJson(route('chat.store'), [
-            'message' => 'Hello, AI!',
+            'messages' => [
+                ['role' => 'user', 'parts' => [['type' => 'text', 'text' => 'Hello, AI!']]],
+            ],
         ]);
 
     $response->assertOk();
@@ -59,14 +62,16 @@ test('authenticated users can send messages to existing conversations', function
     $user = User::factory()->create();
 
     $conversation = $user->conversations()->create([
-        'id' => \Illuminate\Support\Str::uuid(),
+        'id' => Str::uuid(),
         'title' => 'Test Conversation',
     ]);
 
     $response = $this
         ->actingAs($user)
         ->postJson(route('chat.messages', $conversation->id), [
-            'message' => 'Follow-up message',
+            'messages' => [
+                ['role' => 'user', 'parts' => [['type' => 'text', 'text' => 'Follow-up message']]],
+            ],
         ]);
 
     $response->assertOk();
@@ -77,7 +82,7 @@ test('authenticated users can list their conversations', function () {
     $user = User::factory()->create();
 
     $user->conversations()->create([
-        'id' => \Illuminate\Support\Str::uuid(),
+        'id' => Str::uuid(),
         'title' => 'My Conversation',
     ]);
 
@@ -94,7 +99,7 @@ test('authenticated users can delete their conversations', function () {
     $user = User::factory()->create();
 
     $conversation = $user->conversations()->create([
-        'id' => $id = \Illuminate\Support\Str::uuid(),
+        'id' => $id = Str::uuid(),
         'title' => 'To Delete',
     ]);
 
@@ -111,7 +116,7 @@ test('users cannot access other users conversations', function () {
     $user2 = User::factory()->create();
 
     $conversation = $user1->conversations()->create([
-        'id' => $id = \Illuminate\Support\Str::uuid(),
+        'id' => $id = Str::uuid(),
         'title' => 'User 1 Conversation',
     ]);
 
@@ -129,20 +134,22 @@ test('users cannot send messages to other users conversations', function () {
     $user2 = User::factory()->create();
 
     $conversation = $user1->conversations()->create([
-        'id' => $id = \Illuminate\Support\Str::uuid(),
+        'id' => $id = Str::uuid(),
         'title' => 'User 1 Conversation',
     ]);
 
     $response = $this
         ->actingAs($user2)
         ->postJson(route('chat.messages', $id), [
-            'message' => 'Trying to access another user conversation',
+            'messages' => [
+                ['role' => 'user', 'parts' => [['type' => 'text', 'text' => 'Trying to access another user conversation']]],
+            ],
         ]);
 
     $response->assertNotFound();
 });
 
-test('chat store validates message is required', function () {
+test('chat store validates messages is required', function () {
     $user = User::factory()->create();
 
     $response = $this
@@ -150,18 +157,20 @@ test('chat store validates message is required', function () {
         ->postJson(route('chat.store'), []);
 
     $response->assertUnprocessable();
-    $response->assertJsonValidationErrors(['message']);
+    $response->assertJsonValidationErrors(['messages']);
 });
 
-test('chat store validates message max length', function () {
+test('chat store validates messages format', function () {
     $user = User::factory()->create();
 
     $response = $this
         ->actingAs($user)
         ->postJson(route('chat.store'), [
-            'message' => str_repeat('a', 10001),
+            'messages' => [
+                ['role' => 'user', 'parts' => [['type' => 'text', 'text' => str_repeat('a', 10001)]]],
+            ],
         ]);
 
     $response->assertUnprocessable();
-    $response->assertJsonValidationErrors(['message']);
+    $response->assertJsonValidationErrors(['messages.0.parts.0.text']);
 });
