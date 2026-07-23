@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed } from 'vue';
 import { User, Bot } from '@lucide/vue';
+import { computed } from 'vue';
 import MessageContent from './MessageContent.vue';
 
 type MessagePart = {
@@ -28,6 +28,7 @@ const textContent = computed(() => {
             .map((p) => p.text)
             .join('');
     }
+
     return props.message.content ?? '';
 });
 </script>

@@ -30,6 +30,9 @@ class ChatController extends Controller
             'messages.*.parts.*.text' => ['required_with:messages.*.parts.*.type,text', 'string', 'max:10000'],
             'provider' => ['nullable', 'string'],
             'model' => ['nullable', 'string'],
+            'tools' => ['sometimes', 'array'],
+            'tools.*' => ['string', 'in:web-search,web-fetch'],
+            'instructions' => ['nullable', 'string', 'max:2000'],
         ]);
 
         $message = collect($validated['messages'])
@@ -38,10 +41,14 @@ class ChatController extends Controller
 
         $provider = $validated['provider'] ?? null;
         $model = $validated['model'] ?? null;
+        $tools = $validated['tools'] ?? [];
+        $instructions = $validated['instructions'] ?? null;
 
         $agent = new ChatAgent(
             provider: $provider,
             model: $model,
+            enabledTools: $tools,
+            customInstructions: $instructions,
         );
 
         $aiRequest = $this->logRequestStart($request, null, $provider, $model);
@@ -94,6 +101,9 @@ class ChatController extends Controller
             'messages.*.parts.*.text' => ['required_with:messages.*.parts.*.type,text', 'string', 'max:10000'],
             'provider' => ['nullable', 'string'],
             'model' => ['nullable', 'string'],
+            'tools' => ['sometimes', 'array'],
+            'tools.*' => ['string', 'in:web-search,web-fetch'],
+            'instructions' => ['nullable', 'string', 'max:2000'],
         ]);
 
         $request->user()
@@ -107,10 +117,14 @@ class ChatController extends Controller
 
         $provider = $validated['provider'] ?? null;
         $model = $validated['model'] ?? null;
+        $tools = $validated['tools'] ?? [];
+        $instructions = $validated['instructions'] ?? null;
 
         $agent = new ChatAgent(
             provider: $provider,
             model: $model,
+            enabledTools: $tools,
+            customInstructions: $instructions,
         );
 
         $aiRequest = $this->logRequestStart($request, $conversation, $provider, $model);

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import { Send, Square } from '@lucide/vue';
+import { ref } from 'vue';
 import { Button } from '@/components/ui/button';
 
 const props = defineProps<{
@@ -17,7 +17,10 @@ const textareaRef = ref<HTMLTextAreaElement | null>(null);
 
 function handleSubmit() {
     const message = input.value.trim();
-    if (!message || props.isStreaming) return;
+
+    if (!message || props.isStreaming) {
+return;
+}
 
     emit('send', message);
     input.value = '';

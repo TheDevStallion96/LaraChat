@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, nextTick, watch } from 'vue';
-import { marked } from 'marked';
 import hljs from 'highlight.js';
+import { marked } from 'marked';
+import { computed, onMounted, ref, nextTick, watch } from 'vue';
 
 const props = defineProps<{
     content: string;
@@ -19,6 +19,7 @@ const renderer = new marked.Renderer();
 renderer.code = function ({ text, lang }: { text: string; lang?: string }) {
     const language = lang && hljs.getLanguage(lang) ? lang : 'plaintext';
     const highlighted = hljs.highlight(text, { language }).value;
+
     return `<pre class="hljs rounded-lg bg-neutral-900 p-4 text-sm text-neutral-100 overflow-x-auto"><code class="language-${language}">${highlighted}</code></pre>`;
 };
 
