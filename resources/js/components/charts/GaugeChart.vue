@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import * as echarts from 'echarts/core'
 import { GaugeChart } from 'echarts/charts'
 import { TitleComponent, TooltipComponent } from 'echarts/components'
-import { CanvasRenderer } from 'echarts/renderers'
+import * as echarts from 'echarts/core'
 import { use } from 'echarts/core'
-import { ref, watch, onMounted, onUnmounted, type Ref } from 'vue'
+import { CanvasRenderer } from 'echarts/renderers'
+import { ref, watch, onMounted, onUnmounted  } from 'vue'
+import type {Ref} from 'vue';
 
 echarts.use([
   GaugeChart,
@@ -44,7 +45,9 @@ let chartInstance: echarts.ECharts | null = null
 let resizeObserver: ResizeObserver | null = null
 
 const initChart = () => {
-  if (!chartRef.value || chartInstance) return
+  if (!chartRef.value || chartInstance) {
+return
+}
 
   chartInstance = echarts.init(chartRef.value)
 

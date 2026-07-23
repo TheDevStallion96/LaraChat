@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import * as echarts from 'echarts/core'
 import { BarChart, LineChart, ScatterChart } from 'echarts/charts'
 import { TitleComponent, TooltipComponent, GridComponent, LegendComponent, DataZoomComponent } from 'echarts/components'
+import * as echarts from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
 
@@ -54,6 +54,7 @@ let resizeObserver: ResizeObserver | null = null
 const filteredEvents = computed(() => {
   const now = Date.now() / 1000
   const cutoff = now - props.timeWindow
+
   return props.events
     .filter(e => e.timestamp >= cutoff)
     .slice(-props.maxEvents)
@@ -62,6 +63,7 @@ const filteredEvents = computed(() => {
 
 const eventData = computed(() => {
   const events = filteredEvents.value
+
   return {
     timestamps: events.map(e => new Date(e.timestamp * 1000).toLocaleTimeString()),
     events: events.map(e => ({
@@ -83,7 +85,9 @@ const severityColors = {
 }
 
 const initChart = () => {
-  if (!chartRef.value || chartInstance) return
+  if (!chartRef.value || chartInstance) {
+return
+}
 
   chartInstance = echarts.init(chartRef.value)
   chartInstance.setOption(getOption())
@@ -151,6 +155,7 @@ const getOption = () => {
             result += `${p.marker} ${p.seriesName}: ${p.value}<br/>`
           }
         })
+
         return result
       },
     },

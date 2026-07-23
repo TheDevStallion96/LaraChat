@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
-import { onMounted, onUnmounted, ref, reactive } from 'vue';
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
-import PendingInvitationsModal from '@/components/PendingInvitationsModal.vue';
+import { onMounted, onUnmounted, ref, reactive } from 'vue';
 import { GaugeChart, LineChart } from '@/components/charts';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import Heading from '@/components/Heading.vue';
+import PendingInvitationsModal from '@/components/PendingInvitationsModal.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { monitoring } from '@/routes';
 import type { DashboardInvitation, Team } from '@/types';
 
@@ -69,10 +70,14 @@ const chartChannel = ref('')
 const MAX_POINTS = 120
 
 function formatBytes(bytes: number): string {
-  if (bytes === 0) return '0 B'
+  if (bytes === 0) {
+return '0 B'
+}
+
   const k = 1024
   const sizes = ['B', 'KB', 'MB', 'GB', 'TB']
   const i = Math.floor(Math.log(Math.abs(bytes)) / Math.log(k))
+
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
 }
 
@@ -103,18 +108,32 @@ function initEcho() {
     const ch = echo.value.channel('system-metrics')
     ch.listen('.metrics.updated', (data: any) => {
       metrics.timestamp = data.timestamp
+
       if (data.cpu) {
         metrics.cpu = data.cpu
         cpuHistory.value.push({ timestamp: data.timestamp, value: data.cpu.total_usage })
-        if (cpuHistory.value.length > MAX_POINTS) cpuHistory.value.shift()
+
+        if (cpuHistory.value.length > MAX_POINTS) {
+cpuHistory.value.shift()
+}
       }
+
       if (data.memory) {
         metrics.memory = data.memory
         memHistory.value.push({ timestamp: data.timestamp, value: data.memory.usage_percent })
-        if (memHistory.value.length > MAX_POINTS) memHistory.value.shift()
+
+        if (memHistory.value.length > MAX_POINTS) {
+memHistory.value.shift()
+}
       }
-      if (data.disk) metrics.disk = data.disk
-      if (data.network) metrics.network = data.network
+
+      if (data.disk) {
+metrics.disk = data.disk
+}
+
+      if (data.network) {
+metrics.network = data.network
+}
     })
   }
 
@@ -156,6 +175,8 @@ onUnmounted(() => {
 <template>
   <Head title="Dashboard" />
 
+  <h1 class="sr-only">Dashboard</h1>
+
   <PendingInvitationsModal
     v-if="pendingInvitations && pendingInvitations.length > 0"
     :invitations="pendingInvitations"
@@ -165,8 +186,10 @@ onUnmounted(() => {
     <!-- Connection Status -->
     <div class="flex items-center justify-between">
       <div>
-        <h2 class="text-2xl font-bold tracking-tight">System Overview</h2>
-        <p class="text-muted-foreground text-sm">Real-time server metrics</p>
+        <Heading
+          title="System Overview"
+          description="Real-time server metrics"
+        />
       </div>
       <div class="flex items-center gap-3">
         <Badge :class="connected ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'">

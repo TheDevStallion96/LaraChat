@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import { Send, Square } from '@lucide/vue';
+import { ref } from 'vue';
 import { Button } from '@/components/ui/button';
 
 const props = defineProps<{
@@ -17,7 +17,10 @@ const textareaRef = ref<HTMLTextAreaElement | null>(null);
 
 function handleSubmit() {
     const message = input.value.trim();
-    if (!message || props.isStreaming) return;
+
+    if (!message || props.isStreaming) {
+return;
+}
 
     emit('send', message);
     input.value = '';
@@ -44,13 +47,13 @@ function handleInput() {
 
 <template>
     <form @submit.prevent="handleSubmit" class="relative">
-        <div class="flex items-end gap-2 rounded-xl border border-neutral-300 bg-white p-2 shadow-sm dark:border-neutral-600 dark:bg-neutral-800">
+        <div class="flex items-end gap-2 rounded-xl border border-input bg-background p-2 shadow-xs">
             <textarea
                 ref="textareaRef"
                 v-model="input"
                 placeholder="Send a message..."
                 rows="1"
-                class="max-h-48 min-h-[2.5rem] flex-1 resize-none bg-transparent px-2 py-1.5 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none dark:text-neutral-100 dark:placeholder:text-neutral-500"
+                class="max-h-48 min-h-[2.5rem] flex-1 resize-none bg-transparent px-2 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
                 :disabled="isStreaming"
                 @keydown="handleKeydown"
                 @input="handleInput"
@@ -79,7 +82,7 @@ function handleInput() {
             </Button>
         </div>
 
-        <p class="mt-1 text-center text-xs text-neutral-400 dark:text-neutral-600">
+        <p class="mt-1 text-center text-xs text-muted-foreground">
             AI can make mistakes. Check important info.
         </p>
     </form>

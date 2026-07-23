@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import * as echarts from 'echarts/core'
 import { TreemapChart } from 'echarts/charts'
 import { TitleComponent, TooltipComponent } from 'echarts/components'
+import * as echarts from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
 
@@ -45,7 +45,9 @@ let chartInstance: echarts.ECharts | null = null
 let resizeObserver: ResizeObserver | null = null
 
 const initChart = () => {
-  if (!chartRef.value || chartInstance) return
+  if (!chartRef.value || chartInstance) {
+return
+}
 
   chartInstance = echarts.init(chartRef.value)
   chartInstance.setOption(getOption())
@@ -63,9 +65,11 @@ const getOption = () => ({
       const data = params.data
       let result = `<strong>${data.name}</strong><br/>`
       result += `Value: ${data.value}${props.unit}<br/>`
+
       if (data.percent !== undefined) {
         result += `Percentage: ${data.percent}%`
       }
+
       return result
     },
   },
@@ -95,7 +99,10 @@ const getOption = () => ({
         fontSize: 12,
         color: '#1f2937',
         formatter: (params: any) => {
-          if (params.data.value === undefined) return params.data.name
+          if (params.data.value === undefined) {
+return params.data.name
+}
+
           return `${params.data.name}\n${params.data.value}${props.unit}`
         },
       },

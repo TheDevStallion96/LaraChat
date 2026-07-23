@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
 import { Settings2 } from '@lucide/vue';
+import { ref, computed } from 'vue';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -52,13 +52,17 @@ const currentProvider = computed(() =>
 );
 
 const currentModel = computed(() => {
-    if (model.value) return model.value;
+    if (model.value) {
+return model.value;
+}
+
     return currentProvider.value.models[0] ?? 'Default';
 });
 
 function selectProvider(providerId: string) {
     provider.value = providerId;
     const p = providers.find((pr) => pr.id === providerId);
+
     if (p && p.models.length > 0) {
         model.value = p.models[0];
     } else {
