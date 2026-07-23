@@ -140,6 +140,101 @@ class ChatController extends Controller
         return $response;
     }
 
+    public function updateMessage(Request $request, string $conversation, string $message)
+    {
+        $validated = $request->validate([
+            'text' => ['required', 'string', 'max:10000'],
+        ]);
+
+        $conversationModel = $request->user()
+            ->conversations()
+            ->where('id', $conversation)
+            ->firstOrFail();
+
+        $messageModel = $conversationModel->messages()
+            ->where('id', $message)
+            ->where('role', 'user')
+            ->firstOrFail();
+
+        $messageModel->update([
+            'content' => $validated['text'],
+        ]);
+
+        $conversationModel->messages()
+            ->where('created_at', '>', $messageModel->created_at)
+            ->delete();
+
+        $conversationModel->touch();
+
+        $messages = $conversationModel->messages()
+            ->orderBy('created_at')
+            ->get()
+            ->map(fn ($m) => [
+                'id' => $m->id,
+                'role' => $m->role,
+                'parts' => [
+                    ['type' => 'text', 'text' => $m->content],
+                ],
+            ])->all();
+
+        return response()->json([
+            'messages' => $messages,
+        ]);
+    }
+
+    public function regenerate(Request $request, string $conversation)
+    {
+        $conversationModel = $request->user()
+            ->conversations()
+            ->where('id', $conversation)
+            ->firstOrFail();
+
+        $lastAssistantMessage = $conversationModel->messages()
+            ->where('role', 'assistant')
+            ->latest()
+            ->first();
+
+        if ($lastAssistantMessage) {
+            $lastAssistantMessage->delete();
+        }
+
+        $messages = $conversationModel->messages()
+            ->orderBy('created_at')
+            ->get();
+
+        $lastUserMessage = $messages->last();
+
+        if (! $lastUserMessage || $lastUserMessage->role !== 'user') {
+            abort(422, 'No user message to regenerate from');
+        }
+
+        $provider = $request->input('provider');
+        $model = $request->input('model');
+        $tools = $request->input('tools', []);
+        $instructions = $request->input('instructions');
+
+        $agent = new ChatAgent(
+            provider: $provider,
+            model: $model,
+            enabledTools: $tools,
+            customInstructions: $instructions,
+        );
+
+        $lastUserMessage->delete();
+
+        $aiRequest = $this->logRequestStart($request, $conversation, $provider, $model);
+
+        $response = $agent
+            ->continue($conversation, as: $request->user())
+            ->stream($lastUserMessage->content, provider: $provider, model: $model)
+            ->then(function ($response) use ($aiRequest) {
+                $this->completeRequest($aiRequest, $response);
+            })
+            ->usingVercelDataProtocol();
+
+        return $response;
+    }
+
     public function destroy(Request $request, string $conversation)
     {
         $user = $request->user();
