@@ -141,3 +141,4 @@ function refreshConversations() {
         </div>
     </div>
 </template>
+// useChat v4 upgrade applied in PR #8
