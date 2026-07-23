@@ -3,8 +3,8 @@
 namespace App\Monitoring\Collectors;
 
 use App\Monitoring\Contracts\CollectorInterface;
-use App\Monitoring\DTOs\TemperatureMetric;
 use App\Monitoring\DTOs\MetricData;
+use App\Monitoring\DTOs\TemperatureMetric;
 
 class TemperatureCollector implements CollectorInterface
 {
@@ -41,8 +41,8 @@ class TemperatureCollector implements CollectorInterface
                 cpuTemp: 0,
                 gpuTemp: null,
                 fanSpeeds: [],
-                $e->getMessage(),
-                false
+                errorMessage: $e->getMessage(),
+                success: false
             );
         }
     }
@@ -67,14 +67,14 @@ class TemperatureCollector implements CollectorInterface
         $temperatures = [];
         $thermalDir = '/sys/class/thermal';
 
-        if (!is_dir($thermalDir)) {
+        if (! is_dir($thermalDir)) {
             return $this->readHwmonTemperatures();
         }
 
         $zones = scandir($thermalDir);
 
         foreach ($zones as $zone) {
-            if ($zone === '.' || $zone === '..' || !str_starts_with($zone, 'thermal_zone')) {
+            if ($zone === '.' || $zone === '..' || ! str_starts_with($zone, 'thermal_zone')) {
                 continue;
             }
 
@@ -82,7 +82,7 @@ class TemperatureCollector implements CollectorInterface
             $tempFile = "$zonePath/temp";
             $typeFile = "$zonePath/type";
 
-            if (!is_readable($tempFile) || !is_readable($typeFile)) {
+            if (! is_readable($tempFile) || ! is_readable($typeFile)) {
                 continue;
             }
 
@@ -96,7 +96,7 @@ class TemperatureCollector implements CollectorInterface
                 'zone' => $zone,
                 'label' => $type,
                 'temp_c' => round($tempC, 1),
-                'temp_f' => round(($tempC * 9/5) + 32, 1),
+                'temp_f' => round(($tempC * 9 / 5) + 32, 1),
                 'source' => 'thermal',
             ];
         }
@@ -109,14 +109,14 @@ class TemperatureCollector implements CollectorInterface
         $temperatures = [];
         $hwmonDir = '/sys/class/hwmon';
 
-        if (!is_dir($hwmonDir)) {
+        if (! is_dir($hwmonDir)) {
             return [];
         }
 
         $devices = scandir($hwmonDir);
 
         foreach ($devices as $device) {
-            if ($device === '.' || $device === '..' || !str_starts_with($device, 'hwmon')) {
+            if ($device === '.' || $device === '..' || ! str_starts_with($device, 'hwmon')) {
                 continue;
             }
 
@@ -140,7 +140,7 @@ class TemperatureCollector implements CollectorInterface
                     'zone' => $device,
                     'label' => $label,
                     'temp_c' => round($tempC, 1),
-                    'temp_f' => round(($tempC * 9/5) + 32, 1),
+                    'temp_f' => round(($tempC * 9 / 5) + 32, 1),
                     'source' => 'hwmon',
                     'device' => $deviceName,
                 ];
@@ -155,14 +155,14 @@ class TemperatureCollector implements CollectorInterface
         $fans = [];
         $hwmonDir = '/sys/class/hwmon';
 
-        if (!is_dir($hwmonDir)) {
+        if (! is_dir($hwmonDir)) {
             return [];
         }
 
         $devices = scandir($hwmonDir);
 
         foreach ($devices as $device) {
-            if ($device === '.' || $device === '..' || !str_starts_with($device, 'hwmon')) {
+            if ($device === '.' || $device === '..' || ! str_starts_with($device, 'hwmon')) {
                 continue;
             }
 

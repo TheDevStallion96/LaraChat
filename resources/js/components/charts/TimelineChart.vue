@@ -1,19 +1,18 @@
 <script setup lang="ts">
 import * as echarts from 'echarts/core'
-import { BarChart, LineChart } from 'echarts/charts'
-import { TitleComponent, TooltipComponent, GridComponent, LegendComponent, XAxisComponent, YAxisComponent, DataZoomComponent } from 'echarts/components'
+import { BarChart, LineChart, ScatterChart } from 'echarts/charts'
+import { TitleComponent, TooltipComponent, GridComponent, LegendComponent, DataZoomComponent } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
 
 echarts.use([
   BarChart,
   LineChart,
+  ScatterChart,
   TitleComponent,
   TooltipComponent,
   GridComponent,
   LegendComponent,
-  XAxisComponent,
-  YAxisComponent,
   DataZoomComponent,
   CanvasRenderer,
 ])
@@ -217,7 +216,7 @@ const getOption = () => {
     ],
     series,
     animationDuration: 300,
-    animationEasing: 'cubicOut',
+    animationEasing: 'cubicOut' as const,
   }
 }
 

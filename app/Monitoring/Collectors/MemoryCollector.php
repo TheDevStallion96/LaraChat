@@ -36,8 +36,8 @@ class MemoryCollector implements CollectorInterface
                 swapTotalBytes: 0,
                 swapUsedBytes: 0,
                 swapFreeBytes: 0,
-                $e->getMessage(),
-                false
+                errorMessage: $e->getMessage(),
+                success: false
             );
         }
     }

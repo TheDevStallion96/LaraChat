@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import * as echarts from 'echarts/core'
 import { ScatterChart } from 'echarts/charts'
-import { TitleComponent, TooltipComponent, GridComponent, LegendComponent, XAxisComponent, YAxisComponent, VisualMapComponent } from 'echarts/components'
+import { TitleComponent, TooltipComponent, GridComponent, LegendComponent, VisualMapComponent } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
 
@@ -11,8 +11,6 @@ echarts.use([
   TooltipComponent,
   GridComponent,
   LegendComponent,
-  XAxisComponent,
-  YAxisComponent,
   VisualMapComponent,
   CanvasRenderer,
 ])
@@ -144,7 +142,7 @@ const getOption = () => {
       },
     })),
     animationDuration: 500,
-    animationEasing: 'cubicOut',
+    animationEasing: 'cubicOut' as const,
   }
 }
 

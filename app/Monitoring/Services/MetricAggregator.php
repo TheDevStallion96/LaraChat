@@ -18,10 +18,10 @@ class MetricAggregator implements MetricAggregatorInterface
 
     public function aggregate(): SystemMetrics
     {
-        $metrics = new SystemMetrics();
+        $metrics = new SystemMetrics;
 
         foreach ($this->collectors as $name => $collector) {
-            if (!$collector->isAvailable()) {
+            if (! $collector->isAvailable()) {
                 continue;
             }
 
@@ -34,7 +34,7 @@ class MetricAggregator implements MetricAggregatorInterface
 
     public function getAvailableCollectors(): array
     {
-        return array_filter($this->collectors, fn($c) => $c->isAvailable());
+        return array_filter($this->collectors, fn ($c) => $c->isAvailable());
     }
 
     public function getCollector(string $name): ?CollectorInterface

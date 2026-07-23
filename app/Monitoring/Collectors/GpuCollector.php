@@ -17,7 +17,7 @@ class GpuCollector implements CollectorInterface
 
     public function collect(): MetricData
     {
-        if (!$this->nvidiaSmiAvailable) {
+        if (! $this->nvidiaSmiAvailable) {
             return new GpuMetric(
                 gpus: [],
                 gpuCount: 0,
@@ -25,15 +25,15 @@ class GpuCollector implements CollectorInterface
                 usedGpuMemory: 0,
                 avgGpuUtilization: 0,
                 avgMemoryUtilization: 0,
-                'nvidia-smi not available',
-                false
+                errorMessage: 'nvidia-smi not available',
+                success: false
             );
         }
 
         try {
             $output = shell_exec('nvidia-smi --query-gpu=index,name,temperature.gpu,utilization.gpu,utilization.memory,memory.total,memory.used,memory.free,power.draw,power.limit,fan.speed,pstate --format=csv,noheader,nounits 2>/dev/null');
 
-            if (!$output) {
+            if (! $output) {
                 throw new \Exception('nvidia-smi returned no output');
             }
 
@@ -46,10 +46,14 @@ class GpuCollector implements CollectorInterface
 
             foreach (explode("\n", trim($output)) as $line) {
                 $line = trim($line);
-                if ($line === '') continue;
+                if ($line === '') {
+                    continue;
+                }
 
                 $parts = array_map('trim', explode(',', $line));
-                if (count($parts) < 11) continue;
+                if (count($parts) < 11) {
+                    continue;
+                }
 
                 [
                     $index,
@@ -70,7 +74,7 @@ class GpuCollector implements CollectorInterface
                     'index' => (int) $index,
                     'name' => $name,
                     'temperature_c' => (float) $temp,
-                    'temperature_f' => round(($temp * 9/5) + 32, 1),
+                    'temperature_f' => round(($temp * 9 / 5) + 32, 1),
                     'gpu_utilization' => (float) $gpuUtil,
                     'memory_utilization' => (float) $memUtil,
                     'memory_total_mb' => (float) $memTotal,
@@ -105,8 +109,8 @@ class GpuCollector implements CollectorInterface
                 usedGpuMemory: 0,
                 avgGpuUtilization: 0,
                 avgMemoryUtilization: 0,
-                $e->getMessage(),
-                false
+                errorMessage: $e->getMessage(),
+                success: false
             );
         }
     }
@@ -129,6 +133,7 @@ class GpuCollector implements CollectorInterface
     private function checkNvidiaSmi(): bool
     {
         $output = shell_exec('which nvidia-smi 2>/dev/null');
-        return !empty(trim($output));
+
+        return ! empty(trim($output));
     }
 }

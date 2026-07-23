@@ -33,7 +33,7 @@ const props = withDefaults(defineProps<Props>(), {
   unit: '',
   height: '400px',
   levels: 2,
-  colorMapping: [
+  colorMapping: () => [
     { value: 0, color: '#dbeafe' },
     { value: 50, color: '#3b82f6' },
     { value: 100, color: '#1e3a8a' },
@@ -115,7 +115,7 @@ const getOption = () => ({
     },
   ],
   animationDuration: 500,
-  animationEasing: 'cubicOut',
+  animationEasing: 'cubicOut' as const,
 })
 
 watch(

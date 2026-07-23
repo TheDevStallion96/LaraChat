@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Console\Commands\MonitorSystemMetrics;
 use App\Monitoring\Collectors\CpuCollector;
 use App\Monitoring\Collectors\DiskCollector;
 use App\Monitoring\Collectors\DockerCollector;
@@ -26,24 +27,27 @@ class MonitoringServiceProvider extends ServiceProvider
         $this->app->singleton(MetricBroadcasterInterface::class, ReverbMetricBroadcaster::class);
 
         $this->app->singleton(MetricAggregator::class, function ($app) {
-            $aggregator = new MetricAggregator();
+            $aggregator = new MetricAggregator;
 
-            // Register all available collectors
-            $collectors = [
-                new CpuCollector(),
-                new MemoryCollector(),
-                new DiskCollector(),
-                new NetworkCollector(),
-                new ProcessCollector(),
-                new TemperatureCollector(),
-                new GpuCollector(),
-                new DockerCollector(),
-                new QueueCollector(),
-                new OllamaCollector(),
+            $collectorClasses = [
+                'cpu' => CpuCollector::class,
+                'memory' => MemoryCollector::class,
+                'disk' => DiskCollector::class,
+                'network' => NetworkCollector::class,
+                'processes' => ProcessCollector::class,
+                'temperature' => TemperatureCollector::class,
+                'gpu' => GpuCollector::class,
+                'docker' => DockerCollector::class,
+                'queue' => QueueCollector::class,
+                'ollama' => OllamaCollector::class,
             ];
 
-            foreach ($collectors as $collector) {
-                $aggregator->registerCollector($collector);
+            foreach ($collectorClasses as $name => $class) {
+                $enabled = config("monitoring.collectors.{$name}.enabled", true);
+
+                if ($enabled) {
+                    $aggregator->registerCollector(new $class);
+                }
             }
 
             return $aggregator;
@@ -52,15 +56,13 @@ class MonitoringServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // Publish configuration
         $this->publishes([
-            __DIR__ . '/../config/monitoring.php' => config_path('monitoring.php'),
+            config_path('monitoring.php') => config_path('monitoring.php'),
         ], 'monitoring-config');
 
-        // Register command if running in console
         if ($this->app->runningInConsole()) {
             $this->commands([
-                \App\Console\Commands\MonitorSystemMetrics::class,
+                MonitorSystemMetrics::class,
             ]);
         }
     }

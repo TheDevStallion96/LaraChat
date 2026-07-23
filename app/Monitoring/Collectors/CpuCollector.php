@@ -9,6 +9,7 @@ use App\Monitoring\DTOs\MetricData;
 class CpuCollector implements CollectorInterface
 {
     private array $prevCpuTimes = [];
+
     private bool $firstRun = true;
 
     public function collect(): MetricData
@@ -21,6 +22,7 @@ class CpuCollector implements CollectorInterface
             if ($this->firstRun) {
                 $this->prevCpuTimes = $cpuTimes;
                 $this->firstRun = false;
+
                 return new CpuMetric(
                     totalUsage: 0,
                     perCoreUsage: array_fill(0, $cpuInfo['coreCount'], 0),
@@ -48,7 +50,7 @@ class CpuCollector implements CollectorInterface
 
             return new CpuMetric(
                 totalUsage: round($avgUsage, 2),
-                perCoreUsage: array_map(fn($v) => round($v, 2), $perCoreUsage),
+                perCoreUsage: array_map(fn ($v) => round($v, 2), $perCoreUsage),
                 coreCount: $cpuInfo['coreCount'],
                 loadAverage1m: $loadAvg[0],
                 loadAverage5m: $loadAvg[1],
@@ -64,8 +66,8 @@ class CpuCollector implements CollectorInterface
                 loadAverage5m: 0,
                 loadAverage15m: 0,
                 cpuTimes: [],
-                $e->getMessage(),
-                false
+                errorMessage: $e->getMessage(),
+                success: false
             );
         }
     }
@@ -110,6 +112,7 @@ class CpuCollector implements CollectorInterface
     {
         $content = file_get_contents('/proc/loadavg');
         $parts = explode(' ', trim($content));
+
         return [
             (float) ($parts[0] ?? 0),
             (float) ($parts[1] ?? 0),
@@ -125,7 +128,7 @@ class CpuCollector implements CollectorInterface
         $total = [];
 
         foreach ($lines as $line) {
-            if (!str_starts_with($line, 'cpu')) {
+            if (! str_starts_with($line, 'cpu')) {
                 continue;
             }
 

@@ -9,6 +9,7 @@ use App\Monitoring\DTOs\MetricData;
 class DiskCollector implements CollectorInterface
 {
     private array $prevIoStats = [];
+
     private bool $firstRun = true;
 
     public function collect(): MetricData
@@ -69,8 +70,8 @@ class DiskCollector implements CollectorInterface
                 usedBytes: 0,
                 freeBytes: 0,
                 ioStats: [],
-                $e->getMessage(),
-                false
+                errorMessage: $e->getMessage(),
+                success: false
             );
         }
     }

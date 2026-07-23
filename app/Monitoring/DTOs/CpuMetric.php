@@ -26,7 +26,7 @@ class CpuMetric extends MetricData
             'success' => $this->success,
             'error' => $this->errorMessage,
             'total_usage' => round($this->totalUsage, 2),
-            'per_core_usage' => array_map(fn($v) => round($v, 2), $this->perCoreUsage),
+            'per_core_usage' => array_map(fn ($v) => round($v, 2), $this->perCoreUsage),
             'core_count' => $this->coreCount,
             'load_average' => [
                 '1m' => round($this->loadAverage1m, 2),

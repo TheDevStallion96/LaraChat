@@ -3,9 +3,11 @@
 namespace App\Monitoring\Collectors;
 
 use App\Monitoring\Contracts\CollectorInterface;
-use App\Monitoring\DTOs\QueueMetric;
 use App\Monitoring\DTOs\MetricData;
+use App\Monitoring\DTOs\QueueMetric;
+use Illuminate\Queue\Worker;
 use Illuminate\Support\Facades\Redis;
+use Laravel\Horizon\Horizon;
 
 class QueueCollector implements CollectorInterface
 {
@@ -48,8 +50,8 @@ class QueueCollector implements CollectorInterface
                 workers: 0,
                 workerDetails: [],
                 failedJobDetails: [],
-                $e->getMessage(),
-                false
+                errorMessage: $e->getMessage(),
+                success: false
             );
         }
     }
@@ -66,7 +68,15 @@ class QueueCollector implements CollectorInterface
 
     public function isAvailable(): bool
     {
-        return class_exists(\Illuminate\Queue\Worker::class) && Redis::connection()->ping() === '+PONG';
+        if (! class_exists(Worker::class)) {
+            return false;
+        }
+
+        try {
+            return Redis::connection()->ping() === '+PONG';
+        } catch (\Throwable) {
+            return false;
+        }
     }
 
     private function getQueueStats(): array
@@ -88,7 +98,7 @@ class QueueCollector implements CollectorInterface
         }
 
         // Also check for horizon queues if using Horizon
-        if (class_exists(\Laravel\Horizon\Horizon::class)) {
+        if (class_exists(Horizon::class)) {
             $horizonQueues = $this->getHorizonQueueStats();
             $queues = array_merge($queues, $horizonQueues);
         }
@@ -157,7 +167,7 @@ class QueueCollector implements CollectorInterface
         $workers = [];
 
         // Check for Horizon workers
-        if (class_exists(\Laravel\Horizon\Horizon::class)) {
+        if (class_exists(Horizon::class)) {
             $workers = $this->getHorizonWorkers();
         } else {
             $workers = $this->getStandardWorkers();
@@ -221,7 +231,7 @@ class QueueCollector implements CollectorInterface
         $prefix = config("queue.connections.{$connection}.prefix", 'laravel');
         $failedKey = "{$prefix}:failed";
 
-        if (!Redis::connection()->exists($failedKey)) {
+        if (! Redis::connection()->exists($failedKey)) {
             return [];
         }
 

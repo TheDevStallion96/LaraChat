@@ -22,13 +22,19 @@ class MemoryMetric extends MetricData
 
     public function getUsagePercent(): float
     {
-        if ($this->totalBytes === 0) return 0;
+        if ($this->totalBytes === 0) {
+            return 0;
+        }
+
         return round(($this->usedBytes / $this->totalBytes) * 100, 2);
     }
 
     public function getSwapUsagePercent(): float
     {
-        if ($this->swapTotalBytes === 0) return 0;
+        if ($this->swapTotalBytes === 0) {
+            return 0;
+        }
+
         return round(($this->swapUsedBytes / $this->swapTotalBytes) * 100, 2);
     }
 

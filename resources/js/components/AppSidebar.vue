@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
-import { BookOpen, FolderGit2, LayoutGrid, MessageSquare, Plus } from '@lucide/vue';
+import { Activity, BookOpen, FolderGit2, LayoutGrid, MessageSquare, Plus } from '@lucide/vue';
 import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
 import NavConversations from '@/components/NavConversations.vue';
@@ -19,7 +19,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
+import { dashboard, monitoring } from '@/routes';
 import chat from '@/routes/chat';
 import type { NavItem } from '@/types';
 
@@ -29,11 +29,20 @@ const dashboardUrl = computed(() =>
     page.props.currentTeam ? dashboard(page.props.currentTeam.slug).url : '/',
 );
 
+const monitoringUrl = computed(() =>
+    page.props.currentTeam ? monitoring(page.props.currentTeam.slug).url : '/',
+);
+
 const mainNavItems = computed<NavItem[]>(() => [
     {
         title: 'Dashboard',
         href: dashboardUrl.value,
         icon: LayoutGrid,
+    },
+    {
+        title: 'Monitoring',
+        href: monitoringUrl.value,
+        icon: Activity,
     },
     {
         title: 'Chat',

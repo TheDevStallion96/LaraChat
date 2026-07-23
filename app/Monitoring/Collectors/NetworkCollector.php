@@ -3,12 +3,13 @@
 namespace App\Monitoring\Collectors;
 
 use App\Monitoring\Contracts\CollectorInterface;
-use App\Monitoring\DTOs\NetworkMetric;
 use App\Monitoring\DTOs\MetricData;
+use App\Monitoring\DTOs\NetworkMetric;
 
 class NetworkCollector implements CollectorInterface
 {
     private array $prevStats = [];
+
     private bool $firstRun = true;
 
     public function collect(): MetricData
@@ -103,8 +104,8 @@ class NetworkCollector implements CollectorInterface
                 totalErrorsSent: 0,
                 totalDropsReceived: 0,
                 totalDropsSent: 0,
-                $e->getMessage(),
-                false
+                errorMessage: $e->getMessage(),
+                success: false
             );
         }
     }

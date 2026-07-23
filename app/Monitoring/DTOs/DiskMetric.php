@@ -21,6 +21,7 @@ class DiskMetric extends MetricData
         if ($this->totalBytes === 0) {
             return 0;
         }
+
         return round(($this->usedBytes / $this->totalBytes) * 100, 2);
     }
 

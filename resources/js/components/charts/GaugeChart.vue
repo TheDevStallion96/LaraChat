@@ -30,7 +30,7 @@ const props = withDefaults(defineProps<Props>(), {
   min: 0,
   unit: '%',
   color: '#3b82f6',
-  thresholds: [
+  thresholds: () => [
     { value: 50, color: '#22c55e' },
     { value: 80, color: '#f59e0b' },
     { value: 100, color: '#ef4444' },

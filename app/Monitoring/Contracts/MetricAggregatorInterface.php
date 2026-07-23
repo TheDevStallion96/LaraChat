@@ -8,5 +8,5 @@ interface MetricAggregatorInterface
 {
     public function aggregate(): SystemMetrics;
 
-    public function registerCollector(\App\Monitoring\Contracts\CollectorInterface $collector): void;
+    public function registerCollector(CollectorInterface $collector): void;
 }

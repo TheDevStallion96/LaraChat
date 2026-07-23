@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import * as echarts from 'echarts/core'
 import { HeatmapChart } from 'echarts/charts'
-import { TitleComponent, TooltipComponent, GridComponent, VisualMapComponent, XAxisComponent, YAxisComponent } from 'echarts/components'
+import { TitleComponent, TooltipComponent, GridComponent, VisualMapComponent } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
 
@@ -11,8 +11,6 @@ echarts.use([
   TooltipComponent,
   GridComponent,
   VisualMapComponent,
-  XAxisComponent,
-  YAxisComponent,
   CanvasRenderer,
 ])
 
@@ -29,14 +27,14 @@ interface Props {
   yLabels: string[]
   title?: string
   unit?: string
-  colorStops?: Array<{ value: number; color: string }>
+  colorStops: Array<{ value: number; color: string }>
   height?: string
   cellSize?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
   unit: '',
-  colorStops: [
+  colorStops: () => [
     { value: 0, color: '#fef3c7' },
     { value: 0.5, color: '#f59e0b' },
     { value: 1, color: '#ef4444' },
@@ -119,7 +117,7 @@ const getOption = () => ({
     },
   ],
   animationDuration: 300,
-  animationEasing: 'cubicOut',
+  animationEasing: 'cubicOut' as const,
 })
 
 watch(

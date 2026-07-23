@@ -26,13 +26,13 @@ class MonitorSystemMetrics extends Command
         $output = $this->option('output');
         $channels = $this->option('channels');
 
-        $this->info("Starting system metrics collection...");
+        $this->info('Starting system metrics collection...');
         $this->info("Interval: {$interval}s");
-        $this->info("Broadcast: " . ($broadcast ? 'enabled' : 'disabled'));
-        $this->info("Output: " . ($output ? 'enabled' : 'disabled'));
+        $this->info('Broadcast: '.($broadcast ? 'enabled' : 'disabled'));
+        $this->info('Output: '.($output ? 'enabled' : 'disabled'));
 
         if ($channels) {
-            $this->info("Channels: " . implode(', ', $channels));
+            $this->info('Channels: '.implode(', ', $channels));
         }
 
         $startTime = time();
@@ -52,7 +52,7 @@ class MonitorSystemMetrics extends Command
                 if ($broadcast) {
                     $broadcaster->broadcast($metrics);
                     if ($output) {
-                        $this->line("<info>Broadcasted to Reverb</info>");
+                        $this->line('<info>Broadcasted to Reverb</info>');
                     }
                 }
 
@@ -63,7 +63,7 @@ class MonitorSystemMetrics extends Command
 
             // Check duration
             if ($duration > 0 && (time() - $startTime) >= $duration) {
-                $this->info("Duration reached. Stopping.");
+                $this->info('Duration reached. Stopping.');
                 break;
             }
 
@@ -111,7 +111,7 @@ class MonitorSystemMetrics extends Command
 
         if ($metrics->temperature) {
             $temp = $metrics->temperature;
-            $this->line("Temperature: CPU {$temp->cpuTemp}°C" . ($temp->gpuTemp !== null ? " | GPU {$temp->gpuTemp}°C" : ""));
+            $this->line("Temperature: CPU {$temp->cpuTemp}°C".($temp->gpuTemp !== null ? " | GPU {$temp->gpuTemp}°C" : ''));
         }
 
         if ($metrics->gpu) {
@@ -133,7 +133,7 @@ class MonitorSystemMetrics extends Command
 
         if ($metrics->ollama) {
             $ollama = $metrics->ollama;
-            $this->line("Ollama: {$ollama->loadedModels}/{$ollama->totalModels} loaded | Memory: {$ollama->totalMemoryUsage}MB");
+            $this->line("Ollama: {$ollama->loadedModels}/".count($ollama->models)." loaded | Memory: {$ollama->totalMemoryUsage}MB");
         }
     }
 
@@ -144,6 +144,7 @@ class MonitorSystemMetrics extends Command
         $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
         $pow = min($pow, count($units) - 1);
         $value = $bytes / (1024 ** $pow);
-        return round($value, 2) . ' ' . $units[$pow];
+
+        return round($value, 2).' '.$units[$pow];
     }
 }

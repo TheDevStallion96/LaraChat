@@ -1,19 +1,16 @@
 <script setup lang="ts">
 import * as echarts from 'echarts/core'
-import { LineChart, AreaChart } from 'echarts/charts'
-import { TitleComponent, TooltipComponent, GridComponent, LegendComponent, XAxisComponent, YAxisComponent } from 'echarts/components'
+import { LineChart } from 'echarts/charts'
+import { TitleComponent, TooltipComponent, GridComponent, LegendComponent } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
 
 echarts.use([
   LineChart,
-  AreaChart,
   TitleComponent,
   TooltipComponent,
   GridComponent,
   LegendComponent,
-  XAxisComponent,
-  YAxisComponent,
   CanvasRenderer,
 ])
 
@@ -47,7 +44,7 @@ const props = withDefaults(defineProps<Props>(), {
   showSymbol: false,
   maxPoints: 300,
   height: '300px',
-  colors: ['#3b82f6', '#22c55e', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'],
+  colors: () => ['#3b82f6', '#22c55e', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'],
   yAxisMin: undefined,
   yAxisMax: undefined,
 })
@@ -59,8 +56,8 @@ let resizeObserver: ResizeObserver | null = null
 const processedData = computed(() => {
   const data = props.data.slice(-props.maxPoints)
   return {
-    xAxis: data.map(d => new Date(d[props.labelKey] * 1000).toLocaleTimeString()),
-    series: data.map(d => d[props.valueKey]),
+    xAxis: data.map(d => new Date((d[props.labelKey] as number) * 1000).toLocaleTimeString()),
+    series: data.map(d => (d[props.valueKey] as number) ?? 0),
     raw: data,
   }
 })
@@ -119,22 +116,21 @@ const getOption = () => {
       axisLabel: { color: '#6b7280', fontSize: 11, formatter: `{value}${props.unit}` },
       splitLine: { lineStyle: { color: '#f3f4f6' } },
     },
-    series: [
-      {
-        name: props.title || props.valueKey,
-        type: props.type,
+      series: [
+        {
+          name: props.title || props.valueKey,
+          type: 'line',
         data: processedData.value.series,
         smooth: props.smooth,
         showSymbol: props.showSymbol,
         symbolSize: 4,
-        lineStyle: { width: 2 },
-        areaStyle: props.type === 'area' ? { opacity: 0.3 } : undefined,
+        lineStyle: { width: 2, color: colors[0] },
+        areaStyle: props.type === 'area' ? { opacity: 0.3, color: colors[0] } : undefined,
         itemStyle: { color: colors[0] },
-        lineStyle: { color: colors[0] },
       },
     ],
     animationDuration: 300,
-    animationEasing: 'cubicOut',
+    animationEasing: 'cubicOut' as const,
   }
 }
 

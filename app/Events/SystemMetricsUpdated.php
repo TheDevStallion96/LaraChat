@@ -29,6 +29,6 @@ class SystemMetricsUpdated implements ShouldBroadcastNow
 
     public function broadcastWith(): array
     {
-        return $this->metrics->toArray();
+        return $this->metrics->toBroadcastArray();
     }
 }

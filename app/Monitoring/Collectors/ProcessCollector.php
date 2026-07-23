@@ -3,8 +3,8 @@
 namespace App\Monitoring\Collectors;
 
 use App\Monitoring\Contracts\CollectorInterface;
-use App\Monitoring\DTOs\ProcessMetric;
 use App\Monitoring\DTOs\MetricData;
+use App\Monitoring\DTOs\ProcessMetric;
 
 class ProcessCollector implements CollectorInterface
 {
@@ -34,8 +34,8 @@ class ProcessCollector implements CollectorInterface
                 topCpuProcesses: [],
                 topMemoryProcesses: [],
                 allProcesses: [],
-                $e->getMessage(),
-                false
+                errorMessage: $e->getMessage(),
+                success: false
             );
         }
     }
@@ -60,14 +60,14 @@ class ProcessCollector implements CollectorInterface
         $processes = [];
         $procDir = '/proc';
 
-        if (!is_dir($procDir)) {
+        if (! is_dir($procDir)) {
             return [];
         }
 
         $entries = scandir($procDir);
 
         foreach ($entries as $entry) {
-            if (!ctype_digit($entry)) {
+            if (! ctype_digit($entry)) {
                 continue;
             }
 
@@ -76,7 +76,7 @@ class ProcessCollector implements CollectorInterface
             $statusPath = "/proc/{$pid}/status";
             $cmdlinePath = "/proc/{$pid}/cmdline";
 
-            if (!is_readable($statPath) || !is_readable($statusPath)) {
+            if (! is_readable($statPath) || ! is_readable($statusPath)) {
                 continue;
             }
 
@@ -105,7 +105,7 @@ class ProcessCollector implements CollectorInterface
         // Format: pid (comm) state ppid pgrp session tty_nr tpgid flags minflt cmajflt ...
         $statRegex = '/^(\d+)\s+\(([^)]+)\)\s+(\S+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)/';
 
-        if (!preg_match($statRegex, $statContent, $matches)) {
+        if (! preg_match($statRegex, $statContent, $matches)) {
             return null;
         }
 
@@ -207,11 +207,11 @@ class ProcessCollector implements CollectorInterface
         }
 
         // Top 10 by CPU
-        usort($processes, fn($a, $b) => $b['cpu_percent'] <=> $a['cpu_percent']);
+        usort($processes, fn ($a, $b) => $b['cpu_percent'] <=> $a['cpu_percent']);
         $stats['top_cpu'] = array_slice($processes, 0, 10);
 
         // Top 10 by Memory
-        usort($processes, fn($a, $b) => $b['memory_percent'] <=> $a['memory_percent']);
+        usort($processes, fn ($a, $b) => $b['memory_percent'] <=> $a['memory_percent']);
         $stats['top_memory'] = array_slice($processes, 0, 10);
 
         return $stats;

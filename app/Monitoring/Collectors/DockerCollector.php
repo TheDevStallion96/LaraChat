@@ -10,7 +10,7 @@ class DockerCollector implements CollectorInterface
 {
     public function collect(): MetricData
     {
-        if (!$this->isDockerAvailable()) {
+        if (! $this->isDockerAvailable()) {
             return new DockerMetric(
                 containers: [],
                 totalContainers: 0,
@@ -20,8 +20,8 @@ class DockerCollector implements CollectorInterface
                 totalMemoryUsage: 0,
                 networkStats: [],
                 diskStats: [],
-                'Docker not available',
-                false
+                errorMessage: 'Docker not available',
+                success: false
             );
         }
 
@@ -78,8 +78,8 @@ class DockerCollector implements CollectorInterface
                 totalMemoryUsage: 0,
                 networkStats: [],
                 diskStats: [],
-                $e->getMessage(),
-                false
+                errorMessage: $e->getMessage(),
+                success: false
             );
         }
     }
@@ -101,11 +101,12 @@ class DockerCollector implements CollectorInterface
 
     private function isDockerAvailable(): bool
     {
-        if (!shell_exec('which docker 2>/dev/null')) {
+        if (! shell_exec('which docker 2>/dev/null')) {
             return false;
         }
 
         $output = shell_exec('docker info --format "{{.ServerVersion}}" 2>/dev/null');
+
         return $output !== false && trim($output) !== '';
     }
 
@@ -113,14 +114,16 @@ class DockerCollector implements CollectorInterface
     {
         $output = shell_exec('docker stats --no-stream --format "{{.ID}},{{.Name}},{{.Container}},{{.CPUPerc}},{{.MemUsage}},{{.MemPerc}},{{.NetIO}},{{.BlockIO}},{{.PIDs}},{{.Status}}" 2>/dev/null');
 
-        if (!$output) {
+        if (! $output) {
             return [];
         }
 
         $containers = [];
         foreach (explode("\n", trim($output)) as $line) {
             $parts = explode(',', $line);
-            if (count($parts) < 10) continue;
+            if (count($parts) < 10) {
+                continue;
+            }
 
             $cpuPercent = (float) str_replace('%', '', $parts[3]);
             $memParts = explode(' / ', $parts[4]);

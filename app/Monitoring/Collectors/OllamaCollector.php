@@ -3,23 +3,24 @@
 namespace App\Monitoring\Collectors;
 
 use App\Monitoring\Contracts\CollectorInterface;
-use App\Monitoring\DTOs\OllamaMetric;
 use App\Monitoring\DTOs\MetricData;
+use App\Monitoring\DTOs\OllamaMetric;
 
 class OllamaCollector implements CollectorInterface
 {
     private string $ollamaHost;
+
     private bool $ollamaAvailable = false;
 
     public function __construct()
     {
-        $this->ollamaHost = config('monitoring.ollama.host', 'http://localhost:11434');
+        $this->ollamaHost = config('monitoring.collectors.ollama.host', 'http://localhost:11434');
         $this->ollamaAvailable = $this->checkOllama();
     }
 
     public function collect(): MetricData
     {
-        if (!$this->ollamaAvailable) {
+        if (! $this->ollamaAvailable) {
             return new OllamaMetric(
                 models: [],
                 loadedModels: 0,
@@ -29,8 +30,8 @@ class OllamaCollector implements CollectorInterface
                 totalRequests: 0,
                 successfulRequests: 0,
                 failedRequests: 0,
-                'Ollama not available',
-                false
+                errorMessage: 'Ollama not available',
+                success: false
             );
         }
 
@@ -66,8 +67,8 @@ class OllamaCollector implements CollectorInterface
                 totalRequests: 0,
                 successfulRequests: 0,
                 failedRequests: 0,
-                $e->getMessage(),
-                false
+                errorMessage: $e->getMessage(),
+                success: false
             );
         }
     }
@@ -108,7 +109,7 @@ class OllamaCollector implements CollectorInterface
         $result = curl_exec($ch);
         curl_close($ch);
 
-        if (!$result) {
+        if (! $result) {
             return [];
         }
 
@@ -139,7 +140,7 @@ class OllamaCollector implements CollectorInterface
         $result = curl_exec($ch);
         curl_close($ch);
 
-        if (!$result) {
+        if (! $result) {
             return [];
         }
 
@@ -177,7 +178,7 @@ class OllamaCollector implements CollectorInterface
                 'successful_requests' => 0,
                 'failed_requests' => 0,
                 'tokens_per_second' => 0,
-            ]
+            ],
         ];
     }
 }
